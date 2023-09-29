@@ -1,0 +1,24 @@
+<header th:fragment="header" class="px-3 bg-dark d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+        <img src="https://avatars.githubusercontent.com/u/3904529?s=280&v=4" alt="logo" height="50" width="50">
+    </a>
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li><a th:href="'/'" class="nav-link px-2 link-danger text-light">Home</a></li>
+        <li><a th:if="${username}" th:href="'/profile/' + ${#authentication.principal.username}" class="nav-link px-2 text-light link-danger">profile</a></li>
+        <li><a th:if="${username}" th:href="'/profile/all'" class="nav-link px-2 text-light link-danger">Users</a></li>
+        <li><a th:if="${username}" th:href="'/feed'" class="nav-link px-2 text-light link-danger">Feed</a></li>
+    </ul>
+
+    <div class="col-md-3 text-end">
+        <div th:if="${username}" class="d-flex justify-content-end">
+            <h5  th:text ="${#authentication.principal.username}" class="text-light mx-2"></h5>
+            <img  src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+        </div>
+        <a th:if="!${username}" class="btn btn-outline-danger text-decoration-none" th:href="'/login'">Login</a>
+        <a th:if="!${username}" class="btn btn-outline-light text-decoration-none" th:href="'/signup'">Sign up</a>
+        <form th:if="${username}" th:action="'/perform_logout'">
+            <button class="btn btn-sm btn-dark" type="submit"> Log out</button>
+        </form>
+    </div>
+</header>
