@@ -65,3 +65,6 @@ out/
 
 ## ignore .idea folder
 .idea
+
+## .env
+.env
