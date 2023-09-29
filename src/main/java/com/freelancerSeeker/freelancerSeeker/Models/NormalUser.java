@@ -4,8 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor
@@ -13,12 +18,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class NormalUser {
+public class NormalUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "displayName",nullable = false)
-    private String displayName;
+    @Column(name = "username",nullable = false)
+    private String username;
     @Column(name = "password",nullable = false)
     private String password;
     @Column(name = "description")
@@ -33,4 +38,28 @@ public class NormalUser {
     private List<Posts> posts;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Contract> contracts;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
