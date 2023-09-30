@@ -13,18 +13,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
-    NormalUserDetailsService normalUserDetailsService;
-    @Autowired
-    FreeLancerUserDetailsService freeLancerUserDetailsService;
+    UserSiteDetailsService userSiteDetailsService;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(normalUserDetailsService).passwordEncoder(passwordEncoder());
-        auth.userDetailsService(freeLancerUserDetailsService).passwordEncoder(passwordEncoder());
+
+        auth.userDetailsService(userSiteDetailsService).passwordEncoder(passwordEncoder());
     }
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .permitAll()
                 .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/home", true)
                 .failureUrl("/login?error=true")
                 .and()
                 .logout()

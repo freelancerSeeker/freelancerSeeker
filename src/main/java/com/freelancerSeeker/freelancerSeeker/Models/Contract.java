@@ -30,8 +30,7 @@ public class Contract {
     private String body;
     private LocalDate createdAt;
 
+
     @ManyToOne
-    private FreeLancer freeLancer;
-    @ManyToOne
-    private NormalUser user;
+    private UserSite user;
 }

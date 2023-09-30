@@ -16,8 +16,9 @@ public class Skills {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "skill",nullable = false)
+    @Column(name = "skill",nullable = true)
     private String skill;
+
     @ManyToOne
-    private FreeLancer freeLancerUser;
+    private UserSite usersite;
 }
