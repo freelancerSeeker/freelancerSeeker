@@ -18,30 +18,42 @@ import javax.servlet.http.HttpServletRequest;
 public class UserAuthenticationController {
     // This controller to handle both freelancer and user authentication.
 
-@Autowired
-UserSiteRepo userSiteRepo;
+    @Autowired
+    UserSiteRepo userSiteRepo;
     @Autowired
     HttpServletRequest request;
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @GetMapping("/login")
     public String login() {
         return "signup.html";
     }
 
 
+    @GetMapping("/")
+    public String getHome() {
+        return "home";
+    }
 
-@GetMapping("/home")
-public String getHome()
-{
+    @GetMapping("/works")
+    public String getWorks() {
+        return "works";
+    }
 
-return "home";
+    @GetMapping("/reviews")
+    public String getReviews() {
+        return "reviews";
+    }
 
-}
+    @GetMapping("/about")
+    public String getAbout() {
+        return "about";
+    }
 
 
     @PostMapping("/signup")
-    public RedirectView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname,@RequestParam String role) {
+    public RedirectView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role) {
         String encryptedPassword = passwordEncoder.encode(password);
         UserSite usersite = new UserSite();
         usersite.setUsername(username);
