@@ -1,5 +1,6 @@
 package com.freelancerSeeker.freelancerSeeker.Models;
 
+import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,20 +10,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-public class NormalUser implements UserDetails {
+public class UserSite implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(name = "username",nullable = false)
+    @Column(name = "id")
+    private  Long id;
+    @Column(name = "username",unique = true,nullable = false)
     private String username;
     @Column(name = "password",nullable = false)
     private String password;
@@ -38,11 +39,16 @@ public class NormalUser implements UserDetails {
     private List<Posts> posts;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Contract> contracts;
+    @Enumerated(EnumType.ORDINAL)
+    private Role roles;
+    @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
+    private List<Skills> skillsList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority("USER"));
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

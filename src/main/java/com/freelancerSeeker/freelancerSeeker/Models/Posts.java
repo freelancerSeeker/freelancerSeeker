@@ -29,7 +29,6 @@ public class Posts {
     @Column(name = "endDate")
     private Date  endDate;
     @ManyToOne
-    private NormalUser user;
-    @ManyToOne
-    private FreeLancer freeLancer;
+    private UserSite user;
+
 }
