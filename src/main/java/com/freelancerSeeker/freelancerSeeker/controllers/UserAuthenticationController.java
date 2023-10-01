@@ -7,11 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -26,6 +23,7 @@ public class UserAuthenticationController {
     HttpServletRequest request;
     @Autowired
     PasswordEncoder passwordEncoder;
+
 
     @GetMapping("/login")
     public String login() {
@@ -87,6 +85,56 @@ public class UserAuthenticationController {
             e.printStackTrace();
         }
         return new RedirectView("/signup");
+    }
+
+    @GetMapping("/users/{id}")
+    public String getUserInfo(Model m, Principal p, @PathVariable Long id) {
+        if (p != null) {
+            String username = p.getName();
+            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+            m.addAttribute("username", username);
+
+        }
+        UserSiteEntity userSite = userSiteRepo.findById(id).orElseThrow();
+        m.addAttribute("user", userSite);
+        return "/profile.html";
+    }
+
+    @PutMapping("/freelancer/{id}")
+    public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber) {
+        UserSiteEntity userSite= userSiteRepo.findById(id).orElseThrow();
+        userSite.setUsername(username);
+        userSite.setEmail(email);
+        userSite.setFirstname(firstName);
+        userSite.setLastname(lastName);
+        userSiteRepo.save(userSite);
+        return new RedirectView("/freelancer/" + id);
+    }
+    @GetMapping("/users/{id}")
+    public String getNormalUserInfo(Model model, Principal p, @PathVariable Long id) {
+        String username = p.getName();
+        UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+        model.addAttribute("username", username);
+        if (userSite != null) {
+            UserSiteEntity profile = userSiteRepo.findById(id).orElse(null);
+            if (profile != null) {
+                model.addAttribute("user", profile);
+                return "profile.html";
+            }
+        }
+        return "error.html";
+    }
+    @PutMapping("/users/{id}")
+    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestBody UserSiteEntity updatedUser) {
+        UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setDescription(updatedUser.getDescription());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setFirstname(updatedUser.getFirstname());
+        existingUser.setLastname(updatedUser.getLastname());
+        userSiteRepo.save(existingUser);
+        return new RedirectView("/users/" + id);
     }
 
 }
