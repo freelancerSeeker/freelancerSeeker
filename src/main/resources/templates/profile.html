@@ -64,38 +64,55 @@
         <div class="works-content">
             <div class="row">
                 <div class="col-md-12 col-sm-12">
-                    <div class="single-how-works">
+                    <div class="single-how-works no-bg">
                         <div class="single-how-works-icon">
                             <i class="flaticon-location-on-road"></i>
                         </div>
                         <h2 style="margin-top:10px" th:text="${user.username}"></h2>
                         <div class="row">
-                            <form action="" id="editProfile">
+                            <form th:action="'/users/' + ${user.id}" id="editProfile" th:method="PUT">
                                 <div class="col-md-6 col-sm-3">
                                     <div class="form-group">
-                                        <label for="lastName">Last Name:</label>
-                                        <input type="text" class="form-control" id="lastName"
-                                               th:value="${user.lastname}" required disabled>
+                                        <label for="lastName" class="control-label">Last Name:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="lastName"
+                                                   th:value="${user.lastname}" required disabled name="lastname">
+                                            <span class="input-group-addon"><i
+                                                    class="glyphicon glyphicon-user"></i></span>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="firstName">First Name:</label>
-                                        <input type="text" class="form-control" id="firstName"
-                                               th:value="${user.firstname}" required disabled>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="firstName"
+                                                   th:value="${user.firstname}" required disabled name="firstname">
+                                            <span class="input-group-addon"><i
+                                                    class="glyphicon glyphicon-user"></i></span>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-3">
                                     <div class="form-group">
                                         <label for="email">Email:</label>
-                                        <input type="email" class="form-control" id="email" th:value="${user.email}"
-                                               required disabled>
+                                        <div class="input-group">
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                   th:value="${user.email}"
+                                                   required disabled>
+                                            <span class="input-group-addon"><i
+                                                    class="glyphicon glyphicon-envelope"></i></span>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Description:</label>
-                                        <textarea class="form-control" id="description" th:text="${user.description}"
+                                        <textarea class="form-control" id="description" name="description"
+                                                  th:text="${user.description}"
                                                   required disabled></textarea>
+
                                     </div>
                                 </div>
-                                <button type="submit" id="editBtn" style="margin-top:20px;" class="welcome-hero-btn how-work-btn">
+                                <button type="submit" id="editBtn" style="margin-top:20px;"
+                                        class="welcome-hero-btn how-work-btn" onclick="enableEditing()">
                                     Edit profile
                                 </button>
                             </form>
@@ -145,19 +162,25 @@
 
 </section>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var editBtn = document.getElementById("editBtn");
-        var inputFields = document.querySelectorAll("input[type=text], input[type=email], textarea");
-        editBtn.addEventListener("click", function (event) {
-            event.preventDefault(); // Prevent form submission (adjust as needed)
-            // Toggle the 'disabled' attribute on input fields
-            inputFields.forEach(function (input) {
-                input.disabled = !input.disabled;
-            });
-            // Toggle the button text
-            editBtn.textContent = editBtn.textContent === "Edit profile" ? "Save Changes" : "Edit profile";
-        });
-    });
+    let btn = document.getElementById("editBtn");
+  let form = document.getElementById("editProfile")
+
+btn.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (btn.innerText === "Save Changes") {
+        form.submit();
+    } else {
+        // Add logic to handle enabling editing
+        btn.innerText = "Save Changes";
+        const inputs = document.querySelectorAll('input, textarea');
+        for (const input of inputs) {
+            input.removeAttribute('disabled');
+        }
+    }
+});
+
+
 </script>
 <script th:src="@{/assets/js/jquery.js}"></script>
 

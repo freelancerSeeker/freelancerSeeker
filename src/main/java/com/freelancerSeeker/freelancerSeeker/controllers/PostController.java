@@ -14,12 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
+
 
 @Controller
 public class PostController {
@@ -77,7 +73,16 @@ public class PostController {
 //        return "home.html";
 //    }
 
-
+    @PutMapping("/Posts/{postId}")
+    public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
+        PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
+        post.setSubject(subject);
+        post.setBody(body);
+        post.setStartDate(startDate);
+        post.setEndDate(endDate);
+        postsRepo.save(post);
+        return new RedirectView("/Posts/"+postId);
+    }
 
     @DeleteMapping("/posts/{postId}")
     public RedirectView deletePost(@PathVariable Long postId){
