@@ -31,4 +31,12 @@ public class PostsEntity {
     @ManyToOne
     private UserSiteEntity user;
 
+    public PostsEntity(String subject, String body, Date startDate, Date endDate, UserSiteEntity user) {
+        setSubject(subject);
+        setBody(body);
+        setStartDate(startDate);
+        setEndDate(endDate);
+        setUser(user);
+    }
+
 }
