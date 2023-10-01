@@ -41,10 +41,6 @@ public class UserAuthenticationController {
         return "home";
     }
 
-    @GetMapping("/works")
-    public String getWorks() {
-        return "works";
-    }
 
     @GetMapping("/reviews")
     public String getReviews() {
@@ -52,7 +48,12 @@ public class UserAuthenticationController {
     }
 
     @GetMapping("/about")
-    public String getAbout() {
+    public String getAbout(Principal p , Model aboutModel) {
+        if (p != null){
+            String username = p.getName();
+            aboutModel.addAttribute("username",username);
+            return "about";
+        }
         return "about";
     }
 

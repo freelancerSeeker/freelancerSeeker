@@ -16,7 +16,6 @@ import java.security.Principal;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 public class PostController {
@@ -49,12 +48,12 @@ public class PostController {
     }
 
 
-    @GetMapping("/home")
-    public String getAllPosts( Model model){
-        List<PostsEntity> posts=postsRepo.findAll();
-        model.addAttribute("posts",posts);
-        return "home.html";
-    }
+//    @GetMapping("/home")
+//    public String getAllPosts( Model model){
+//        List<PostsEntity> posts=postsRepo.findAll();
+//        model.addAttribute("posts",posts);
+//        return "home.html";
+//    }
 
     @PutMapping("/Posts/{postId}")
     public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){

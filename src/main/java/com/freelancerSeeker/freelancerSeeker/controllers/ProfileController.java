@@ -36,15 +36,13 @@ public class ProfileController {
         return new RedirectView("/freelancer/" + id);
     }
     @PutMapping("/users/{id}")
-    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestBody UserSiteEntity updatedUser) {
+    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname , @RequestParam String lastname , @RequestParam String description ,@RequestParam String email ) {
         UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setDescription(updatedUser.getDescription());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setFirstname(updatedUser.getFirstname());
-        existingUser.setLastname(updatedUser.getLastname());
+        existingUser.setDescription(description);
+        existingUser.setEmail(email);
+        existingUser.setFirstname(firstname);
+        existingUser.setLastname(lastname);
         userSiteRepo.save(existingUser);
-        return new RedirectView("/users/" + id);
+        return new RedirectView("/profile/" + existingUser.getUsername());
     }
 }
