@@ -1,4 +1,4 @@
-package com.freelancerSeeker.freelancerSeeker.Models;
+package com.freelancerSeeker.freelancerSeeker.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Skills {
+public class SkillsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -20,5 +20,5 @@ public class Skills {
     private String skill;
 
     @ManyToOne
-    private UserSite usersite;
+    private UserSiteEntity usersite;
 }
