@@ -110,20 +110,6 @@ public class UserAuthenticationController {
         userSiteRepo.save(userSite);
         return new RedirectView("/freelancer/" + id);
     }
-    @GetMapping("/users/{id}")
-    public String getNormalUserInfo(Model model, Principal p, @PathVariable Long id) {
-        String username = p.getName();
-        UserSiteEntity userSite = userSiteRepo.findByUsername(username);
-        model.addAttribute("username", username);
-        if (userSite != null) {
-            UserSiteEntity profile = userSiteRepo.findById(id).orElse(null);
-            if (profile != null) {
-                model.addAttribute("user", profile);
-                return "profile.html";
-            }
-        }
-        return "error.html";
-    }
     @PutMapping("/users/{id}")
     public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestBody UserSiteEntity updatedUser) {
         UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();

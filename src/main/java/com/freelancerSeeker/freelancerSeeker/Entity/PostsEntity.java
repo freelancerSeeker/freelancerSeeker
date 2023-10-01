@@ -13,6 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Table
 public class PostsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

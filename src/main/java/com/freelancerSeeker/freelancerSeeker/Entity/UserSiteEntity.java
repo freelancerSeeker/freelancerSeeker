@@ -17,6 +17,7 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+@Table
 public class UserSiteEntity implements UserDetails {
 
     @Id

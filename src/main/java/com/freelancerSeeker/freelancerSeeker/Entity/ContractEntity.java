@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table
 public class ContractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
