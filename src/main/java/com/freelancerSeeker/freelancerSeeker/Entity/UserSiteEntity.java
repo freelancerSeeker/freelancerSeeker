@@ -1,4 +1,4 @@
-package com.freelancerSeeker.freelancerSeeker.Models;
+package com.freelancerSeeker.freelancerSeeker.Entity;
 
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,8 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
-public class UserSite implements UserDetails {
+@Table
+public class UserSiteEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,13 +37,13 @@ public class UserSite implements UserDetails {
     @Column(name = "lastName",nullable = false)
     private String lastname;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Posts> posts;
+    private List<PostsEntity> posts;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Contract> contracts;
+    private List<ContractEntity> contracts;
     @Enumerated(EnumType.ORDINAL)
     private Role roles;
     @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
-    private List<Skills> skillsList;
+    private List<SkillsEntity> skillsList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,4 +69,6 @@ public class UserSite implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

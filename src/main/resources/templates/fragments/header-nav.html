@@ -1,24 +1,39 @@
-<header th:fragment="header" class="px-3 bg-dark d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-        <img src="https://avatars.githubusercontent.com/u/3904529?s=280&v=4" alt="logo" height="50" width="50">
-    </a>
+<section th:fragment="header" class="top-area">
+    <div class="header-area">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-default bootsnav  navbar-sticky navbar-scrollspy"  data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a th:href="'/'" class="nav-link px-2 link-danger text-light">Home</a></li>
-        <li><a th:if="${username}" th:href="'/profile/' + ${#authentication.principal.username}" class="nav-link px-2 text-light link-danger">profile</a></li>
-        <li><a th:if="${username}" th:href="'/profile/all'" class="nav-link px-2 text-light link-danger">Users</a></li>
-        <li><a th:if="${username}" th:href="'/feed'" class="nav-link px-2 text-light link-danger">Feed</a></li>
-    </ul>
+            <div class="container">
 
-    <div class="col-md-3 text-end">
-        <div th:if="${username}" class="d-flex justify-content-end">
-            <h5  th:text ="${#authentication.principal.username}" class="text-light mx-2"></h5>
-            <img  src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-        </div>
-        <a th:if="!${username}" class="btn btn-outline-danger text-decoration-none" th:href="'/login'">Login</a>
-        <a th:if="!${username}" class="btn btn-outline-light text-decoration-none" th:href="'/signup'">Sign up</a>
-        <form th:if="${username}" th:action="'/perform_logout'">
-            <button class="btn btn-sm btn-dark" type="submit"> Log out</button>
-        </form>
-    </div>
-</header>
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="/">Freelancer<span>Seeker</span></a>
+
+                </div><!--/.navbar-header-->
+                <!-- End Header Navigation -->
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class="active"><a href="/">home</a></li>
+                        <li class=""><a href="/works">how it works</a></li>
+                        <li class=""><a href="/reviews">review</a></li>
+                        <li class=""><a href="/about">About us</a></li>
+                        <li th:if="!${username}" class=""><a href="/login">sign in</a></li>
+                        <li th:if="${username}"><a th:text="${username}">sign in</a></li>
+                        <li>
+                            <form th:if="${username}" th:action="'/perform_logout'">
+                                <button style="margin-top:10px" class="welcome-hero-btn" type="submit"> Log out</button>
+                            </form>
+                        </li>
+                    </ul><!--/.nav -->
+                </div><!-- /.navbar-collapse -->
+            </div><!--/.container-->
+        </nav><!--/nav-->
+        <!-- End Navigation -->
+    </div><!--/.header-area-->
+    <div class="clearfix"></div>
+
+</section><!-- /.top-area-->

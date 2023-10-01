@@ -1,4 +1,4 @@
-package com.freelancerSeeker.freelancerSeeker.Models;
+package com.freelancerSeeker.freelancerSeeker.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,14 +7,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
-public class Contract {
+@Table
+public class ContractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -30,9 +30,9 @@ public class Contract {
     private String body;
     private LocalDate createdAt;
     @ManyToOne
-    private UserSite user;
+    private UserSiteEntity user;
 
-    public Contract(String subject, String startDate, String endDate, double pricePerHour, String body, UserSite user) {
+    public ContractEntity(String subject, String startDate, String endDate, double pricePerHour, String body, UserSiteEntity user) {
         setSubject(subject);
         setStartDate(startDate);
         setEndDate(endDate);
@@ -41,4 +41,7 @@ public class Contract {
         setUser(user);
 
     }
+
+
+
 }

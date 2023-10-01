@@ -1,10 +1,11 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
+import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
+import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Exceptions.ResourceNotFoundException;
-import com.freelancerSeeker.freelancerSeeker.Models.Posts;
-import com.freelancerSeeker.freelancerSeeker.Models.UserSite;
-import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepo;
-import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepo;
+
+import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
+import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,17 +22,17 @@ import java.util.List;
 public class PostController {
 
     @Autowired
-    PostsRepo postsRepo;
+    PostsRepository postsRepo;
     @Autowired
-    UserSiteRepo userSiteRepo;
+    UserSiteRepository userSiteRepo;
 
     @PostMapping("/create-post")
     public RedirectView createPost(Principal principal, String subject, String body, Date startDate, Date  endDate){
         if(principal!=null){
             String username=principal.getName();
-            UserSite userSite=userSiteRepo.findByUsername(username);
+            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
             if(userSite!=null){
-                Posts post=new Posts(subject,body,startDate,endDate,userSite);
+                PostsEntity post=new PostsEntity(subject,body,startDate,endDate,userSite);
                 post.setCreatedAt(Date.from(Instant.from(LocalDate.now())));
                 postsRepo.save(post);
                 return new RedirectView("/profile");
@@ -42,7 +43,7 @@ public class PostController {
 
     @GetMapping("/Posts/{postId}")
     public String getPostById(@PathVariable Long postId,Model model){
-        Posts post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
+        PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
         model.addAttribute("postDetails",post);
         return "post.html";
     }
@@ -50,14 +51,14 @@ public class PostController {
 
     @GetMapping("/home")
     public String getAllPosts( Model model){
-        List<Posts> posts=postsRepo.findAll();
+        List<PostsEntity> posts=postsRepo.findAll();
         model.addAttribute("posts",posts);
         return "home.html";
     }
 
     @PutMapping("/Posts/{postId}")
     public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
-        Posts post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
+        PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
         post.setSubject(subject);
         post.setBody(body);
         post.setStartDate(startDate);
