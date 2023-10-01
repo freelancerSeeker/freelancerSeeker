@@ -1,15 +1,14 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
-import com.freelancerSeeker.freelancerSeeker.Models.UserSite;
-import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepo;
+import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -19,7 +18,7 @@ public class UserAuthenticationController {
     // This controller to handle both freelancer and user authentication.
 
     @Autowired
-    UserSiteRepo userSiteRepo;
+    UserSiteRepository userSiteRepo;
     @Autowired
     HttpServletRequest request;
     @Autowired
@@ -33,7 +32,12 @@ public class UserAuthenticationController {
 
 
     @GetMapping("/")
-    public String getHome() {
+    public String getHome(Principal p , Model homeModel) {
+        if (p != null){
+            String username = p.getName();
+            homeModel.addAttribute("username",username);
+            return "home";
+        }
         return "home";
     }
 
@@ -56,7 +60,7 @@ public class UserAuthenticationController {
     @PostMapping("/signup")
     public RedirectView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role) {
         String encryptedPassword = passwordEncoder.encode(password);
-        UserSite usersite = new UserSite();
+        UserSiteEntity usersite = new UserSiteEntity();
         usersite.setUsername(username);
         usersite.setPassword(encryptedPassword);
         usersite.setDescription(description);
@@ -87,18 +91,18 @@ public class UserAuthenticationController {
     public String getUserInfo(Model m, Principal p, @PathVariable Long id) {
         if (p != null) {
             String username = p.getName();
-            UserSite userSite = userSiteRepo.findByUsername(username);
+            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
             m.addAttribute("username", username);
 
         }
-        UserSite userSite = userSiteRepo.findById(id).orElseThrow();
+        UserSiteEntity userSite = userSiteRepo.findById(id).orElseThrow();
         m.addAttribute("user", userSite);
         return "/profile.html";
     }
 
     @PutMapping("/freelancer/{id}")
     public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber) {
-        UserSite userSite= userSiteRepo.findById(id).orElseThrow();
+        UserSiteEntity userSite= userSiteRepo.findById(id).orElseThrow();
         userSite.setUsername(username);
         userSite.setEmail(email);
         userSite.setFirstname(firstName);
@@ -106,23 +110,9 @@ public class UserAuthenticationController {
         userSiteRepo.save(userSite);
         return new RedirectView("/freelancer/" + id);
     }
-    @GetMapping("/users/{id}")
-    public String getNormalUserInfo(Model model, Principal p, @PathVariable Long id) {
-        String username = p.getName();
-        UserSite userSite = userSiteRepo.findByUsername(username);
-        model.addAttribute("username", username);
-        if (userSite != null) {
-            UserSite profile = userSiteRepo.findById(id).orElse(null);
-            if (profile != null) {
-                model.addAttribute("user", profile);
-                return "profile.html";
-            }
-        }
-        return "error.html";
-    }
     @PutMapping("/users/{id}")
-    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestBody UserSite updatedUser) {
-        UserSite existingUser = userSiteRepo.findById(id).orElseThrow();
+    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestBody UserSiteEntity updatedUser) {
+        UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setDescription(updatedUser.getDescription());

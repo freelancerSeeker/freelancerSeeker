@@ -1,4 +1,4 @@
-package com.freelancerSeeker.freelancerSeeker.Models;
+package com.freelancerSeeker.freelancerSeeker.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -14,7 +13,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-public class Posts {
+@Table
+public class PostsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,6 +29,6 @@ public class Posts {
     @Column(name = "endDate")
     private Date  endDate;
     @ManyToOne
-    private UserSite user;
+    private UserSiteEntity user;
 
 }
