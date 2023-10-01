@@ -1,6 +1,7 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,13 @@ import java.security.Principal;
 public class ProfileController {
     @Autowired
     UserSiteRepository userSiteRepo;
+
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
         if (p != null) {
             UserSiteEntity userSite = userSiteRepo.findByUsername(username);
             m.addAttribute("user", userSite);
+            m.addAttribute("post", userSite.getPosts());
             return "profile";
 
         }
