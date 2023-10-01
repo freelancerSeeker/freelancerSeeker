@@ -31,4 +31,12 @@ public class Posts {
     @ManyToOne
     private UserSite user;
 
+    public Posts(String subject, String body, Date startDate, Date endDate, UserSite user) {
+        setSubject(subject);
+        setBody(body);
+        setStartDate(startDate);
+        setEndDate(endDate);
+        setUser(user);
+    }
+
 }

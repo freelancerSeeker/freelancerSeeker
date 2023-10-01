@@ -29,8 +29,16 @@ public class Contract {
     @Column(name = "body",nullable = false)
     private String body;
     private LocalDate createdAt;
-
-
     @ManyToOne
     private UserSite user;
+
+    public Contract(String subject, String startDate, String endDate, double pricePerHour, String body, UserSite user) {
+        setSubject(subject);
+        setStartDate(startDate);
+        setEndDate(endDate);
+        setPricePerHour(pricePerHour);
+        setBody(body);
+        setUser(user);
+
+    }
 }
