@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User Profile</title>
+    <meta charset="UTF-8" />
+    <style>
+      body{
+        margin-top:20px;
+        color: #1a202c;
+        text-align: left;
+        background-color: #e2e8f0;
+      }
+
+      .main-body {
+        padding: 15px;
+      }
+
+      .list-group-item h6 {
+        margin-bottom: 0.5rem;
+      }
+
+      .card {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+        margin-bottom: 1rem;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+      }
+
+      .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1rem;
+      }
+
+      .card-body hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type=text], input[type=email], textarea {
+        border: 1px solid #ccc;
+        border-radius: .25rem;
+        padding: 0.5rem;
+      }
+
+      button[type=submit] {
+        padding: 0.5rem 1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: .25rem;
+        cursor: pointer;
+        transition: background-color .3s ease-out;
+      }
+      button[type=submit]:hover {
+        background-color: #0069d9;
+      }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="main-body">
+
+        <h1>User Profile</h1>
+
+        <div th:if="${user != null}">
+            <div>
+                <label>Username</label>
+                <span th:text="${user.username}"></span>
+            </div>
+            <hr>
+            <div>
+                <label>Email</label>
+                <span th:text="${user.email}"></span>
+            </div>
+            <hr>
+            <div>
+                <label>First Name</label>
+                <span th:text="${user.firstName}"></span>
+            </div>
+            <hr>
+            <div>
+                <label>Last Name</label>
+                <span th:text="${user.lastName}"></span>
+            </div>
+            <hr>
+            <div>
+                <label>Description</label>
+                <span th:text="${user.description}"></span>
+            </div>
+            <hr>
+            <div>
+                <label>Phone Number</label>
+                <span th:text="${user.phoneNumber}"></span>
+            </div>
+            <hr>
+            <a th:href="@{'/users/' + ${user.id} + '/edit'}">Edit Profile</a>
+        </div>
+        <div th:if="${user == null}">
+            <p>No user found with this ID.</p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+</html>
