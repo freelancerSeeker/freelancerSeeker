@@ -29,8 +29,19 @@ public class ContractEntity {
     @Column(name = "body",nullable = false)
     private String body;
     private LocalDate createdAt;
-
-
     @ManyToOne
     private UserSiteEntity user;
+
+    public ContractEntity(String subject, String startDate, String endDate, double pricePerHour, String body, UserSiteEntity user) {
+        setSubject(subject);
+        setStartDate(startDate);
+        setEndDate(endDate);
+        setPricePerHour(pricePerHour);
+        setBody(body);
+        setUser(user);
+
+    }
+
+
+
 }

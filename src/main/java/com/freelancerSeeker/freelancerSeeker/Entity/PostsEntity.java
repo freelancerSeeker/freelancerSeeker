@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -27,8 +28,10 @@ public class PostsEntity {
     @Column(name = "startDate",nullable = false)
     private Date startDate;
     @Column(name = "endDate")
-    private Date  endDate;
+    private Date endDate;
     @ManyToOne
     private UserSiteEntity user;
+
+
 
 }
