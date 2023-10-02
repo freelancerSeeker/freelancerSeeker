@@ -42,7 +42,7 @@ public class ContractController {
         return new RedirectView("/profile");
     }
 
-    @GetMapping("/home")
+    @GetMapping("/contracts")
     public String getAllContract(Model model){
         List<ContractEntity> contracts=contractsRepo.findAll();
         model.addAttribute("contracts",contracts);

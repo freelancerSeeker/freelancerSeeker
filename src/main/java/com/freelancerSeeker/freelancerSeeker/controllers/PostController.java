@@ -3,7 +3,6 @@ package com.freelancerSeeker.freelancerSeeker.controllers;
 import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Exceptions.ResourceNotFoundException;
-
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -69,12 +70,13 @@ public class PostController {
 //        return new RedirectView("/Posts/"+postId);
 //    }
 
-//    @GetMapping("/home")
+//    @GetMapping("/Posts")
 //    public String getAllPosts( Model model){
 //        List<PostsEntity> posts=postsRepo.findAll();
-//        model.addAttribute("posts",posts);
+//        model.addAttribute("postList",posts);
 //        return "home.html";
 //    }
+
 
     @PutMapping("/Posts/{postId}")
     public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
