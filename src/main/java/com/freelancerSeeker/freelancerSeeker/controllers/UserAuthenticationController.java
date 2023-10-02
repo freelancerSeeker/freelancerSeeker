@@ -31,8 +31,12 @@ public class UserAuthenticationController {
 
 
     @GetMapping("/login")
-    public String login() {
-        return "signup.html";
+    public String login(Principal p) {
+        if (alreadyLoggedIn(p))
+        {
+            return "redirect:/profile/" + p.getName();
+        }
+        return "signup";
     }
 
 
@@ -64,10 +68,13 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
-    public ModelAndView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
+    public ModelAndView signupNormalUser(Principal p,@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
         ModelAndView modelAndView = new ModelAndView();
+        if (alreadyLoggedIn(p)){
+            modelAndView.setViewName("redirect:/profile/" + p.getName());
+        }
         if (userSiteRepo.findByUsername(username) != null) {
-            modelAndView.addObject("usernameError","Username already exists. Please choose a different username.");
+            modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
             modelAndView.setViewName("redirect:/login");
         } else {
             String encryptedPassword = passwordEncoder.encode(password);
@@ -86,17 +93,6 @@ public class UserAuthenticationController {
         return modelAndView;
     }
 
-//    @PostMapping("/signup/check-username")
-//    @ResponseBody
-//    public ResponseEntity<String> checkUsernameAvailability(@RequestParam String username) {
-//        if (userSiteRepo.findByUsername(username) != null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body("Username already exists. Please choose a different username.");
-//        }
-//
-//        return ResponseEntity.ok("Username is available");
-//    }
-
 
     public RedirectView authWithHttpServletRequest(String username, String password) {
 
@@ -108,5 +104,8 @@ public class UserAuthenticationController {
         return new RedirectView("/signup");
     }
 
+    private boolean alreadyLoggedIn(Principal p) {
+        return p != null;
+    }
 
 }
