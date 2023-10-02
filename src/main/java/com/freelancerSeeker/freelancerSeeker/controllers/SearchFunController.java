@@ -1,8 +1,12 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
+import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +24,17 @@ public class SearchFunController {
 @Autowired
     PostsRepository postsRepository;
     @GetMapping("/search/{subject}")
-    public String getSearchPost(Model model, @PathVariable String subject, Principal principal)
+    public String getSearchPost(Model model, @PathVariable String subject, Principal principal,@RequestParam(name = "page", defaultValue = "1") int page)
     {
-        List<PostsEntity> post = postsRepository.findBySubjectContainingOrderByCreatedAtDesc(subject);
+        int postPerpage=9;
+        int offest=(page-1)*postPerpage;
+        Pageable pageable= PageRequest.of(page-1,postPerpage,Sort.by("CreatedAt").descending());
+        Page <PostsEntity> postPage = postsRepository.findBySubjectContaining(subject, pageable);
+        List<PostsEntity> post = postPage.getContent();
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", postPage.getTotalPages());
+
+//        List<PostsEntity> post = postsRepository.findBySubjectContainingOrderByCreatedAtDesc(subject);
         model.addAttribute("posts",post);
         if(principal!=null)
         {
@@ -43,6 +55,8 @@ public class SearchFunController {
         {
             String username = principal.getName();
             List<PostsEntity> post= postsRepository.findBySubjectContainingOrderByCreatedAtDesc(subject);
+
+
             model.addAttribute("posts",post);
             model.addAttribute("subject", subject);
             model.addAttribute("username",username);
