@@ -1,14 +1,9 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
-import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
-import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class UserAuthenticationController {
@@ -34,8 +28,6 @@ public class UserAuthenticationController {
     HttpServletRequest request;
     @Autowired
     PasswordEncoder passwordEncoder;
-    @Autowired
-    PostsRepository postsRepo;
 
 
     @GetMapping("/login")
@@ -45,23 +37,14 @@ public class UserAuthenticationController {
 
 
     @GetMapping("/")
-    public String getHome(Principal p, Model homeModel, @RequestParam(required = false, defaultValue = "0") int page) {
-        Pageable pageable= PageRequest.of(page,9);
-        Page<PostsEntity> posts=postsRepo.findAllByOrderByCreatedAtDesc(pageable);
-        homeModel.addAttribute("postList",posts.getContent());
-        homeModel.addAttribute("Page", page);
-        homeModel.addAttribute("totalPages", posts.getTotalPages());
-
+    public String getHome(Principal p, Model homeModel) {
         if (p != null) {
             String username = p.getName();
             homeModel.addAttribute("username", username);
             return "home";
         }
-
         return "home";
     }
-
-
 
 
     @GetMapping("/reviews")
