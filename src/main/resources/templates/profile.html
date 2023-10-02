@@ -121,6 +121,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="container-fluid">
@@ -149,6 +150,7 @@
                         </form>
                     </div>
 
+
                 </div>
             </div>
             <div class="row">
@@ -159,6 +161,32 @@
 
                         <p th:text="${posts.body}" style="margin-top:20px"></p>
                         <p th:text="${#dates.format(posts.createdAt, 'yyyy-MM-dd')}"></p>
+
+                        <form th:action="'/posts/' + ${posts.id}" th:method="PUT">
+                            <div class="form-group">
+                                <label for="subject">Subject:</label>
+                                <input type="text" class="form-control" id="subject" name="subject" th:value="${posts.subject}" >
+                            </div>
+                            <div class="form-group">
+                                <label for="body">Body:</label>
+                                <textarea class="form-control" id="body" name="body" required th:text="${posts.body}"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="startDate">Start Date:</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(posts.startDate, 'yyyy-MM-dd')}" >
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate">End Date:</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(posts.endDate, 'yyyy-MM-dd')}" >
+                            </div>
+                            <button type="submit" class="update-btn welcome-hero-btn how-work-btn ">Update</button>
+                        </form>
+                        <form th:action="'/posts/delete/' + ${posts.id}" method="post">
+
+                            <input type="hidden" value="DELETE">
+                            <button type="button" class="delete-btn welcome-hero-btn how-work-btn ">Delete</button>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -186,8 +214,61 @@ btn.addEventListener('click', function (e) {
         }
     }
 });
+ let deleteBtns = document.querySelectorAll(".delete-btn");
+
+deleteBtns.forEach(btn => {
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const form = this.parentElement;
+    const url = form.action;
+
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(() => {
+      window.location.reload();
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  });
+});
+let updateForms = document.querySelectorAll(".update-btn");
 
 
+updateForms.forEach(form => {
+  let btn = form.querySelector(".update-btn");
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const url = form.action;
+    const subject = form.querySelector('input[name="subject"]').value;
+    const startDate = form.querySelector('input[name="startDate"]').value;
+    const endDate = form.querySelector('input[name="endDate"]').value;
+    const body = form.querySelector('textarea[name="body"]').value;
+    fetch(url, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        subject: subject,
+        body: body,
+        startDate: startDate,
+        endDate: endDate
+      })
+    })
+    .then(() => {
+      window.location.reload();
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  });
+});
 
 </script>
 <script th:src="@{/assets/js/jquery.js}"></script>

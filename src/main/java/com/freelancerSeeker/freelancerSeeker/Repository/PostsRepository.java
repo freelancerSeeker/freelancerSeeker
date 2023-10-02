@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
     List<PostsEntity> findByUserId(Long userId);
+
     List<PostsEntity> findAllByOrderBySubjectDesc();
     List<PostsEntity> findBySubject(String subject);
     List<PostsEntity> findBySubjectOrderBySubjectDesc(String subject);
@@ -19,5 +20,6 @@ public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
 
 
     Page<PostsEntity> findBySubjectContaining(String subject, Pageable pageable);
+
 }
 
