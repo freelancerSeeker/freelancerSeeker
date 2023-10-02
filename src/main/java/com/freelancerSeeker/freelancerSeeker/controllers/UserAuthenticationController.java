@@ -4,6 +4,8 @@ import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
@@ -59,7 +62,13 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
-    public RedirectView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role) {
+    public RedirectView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
+        if (userSiteRepo.findByUsername(username) != null) {
+            // Username already exists, add an error message to the model
+            model.addAttribute("usernameError", "Username already exists. Please choose a different username.");
+            return new RedirectView("/signup");
+        }
+
         String encryptedPassword = passwordEncoder.encode(password);
         UserSiteEntity usersite = new UserSiteEntity();
         usersite.setUsername(username);
@@ -71,12 +80,24 @@ public class UserAuthenticationController {
         usersite.setRoles(Role.valueOf(role));
         userSiteRepo.save(usersite);
 
-
         System.out.println(usersite.getUsername());
 
         return new RedirectView("/login");
-
     }
+
+//    @PostMapping("/signup/check-username")
+//    @ResponseBody
+//    public ResponseEntity<String> checkUsernameAvailability(@RequestParam String username) {
+//        if (userSiteRepo.findByUsername(username) != null) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body("Username already exists. Please choose a different username.");
+//        }
+//
+//        return ResponseEntity.ok("Username is available");
+//    }
+
+
+
 
     public RedirectView authWithHttpServletRequest(String username, String password) {
 
