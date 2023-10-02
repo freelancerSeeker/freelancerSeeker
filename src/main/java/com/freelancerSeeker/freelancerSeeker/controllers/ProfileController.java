@@ -1,6 +1,5 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
-import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
@@ -9,16 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class ProfileController {
     @Autowired
     UserSiteRepository userSiteRepo;
-    @Autowired
-    PostsRepository postsRepository;
 
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
@@ -34,7 +29,7 @@ public class ProfileController {
 
     @PutMapping("/freelancer/{id}")
     public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber) {
-        UserSiteEntity userSite= userSiteRepo.findById(id).orElseThrow();
+        UserSiteEntity userSite = userSiteRepo.findById(id).orElseThrow();
         userSite.setUsername(username);
         userSite.setEmail(email);
         userSite.setFirstname(firstName);
@@ -43,7 +38,7 @@ public class ProfileController {
         return new RedirectView("/freelancer/" + id);
     }
     @PutMapping("/users/{id}")
-    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname , @RequestParam String lastname , @RequestParam String description ,@RequestParam String email ) {
+    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String description, @RequestParam String email) {
         UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();
         existingUser.setDescription(description);
         existingUser.setEmail(email);
