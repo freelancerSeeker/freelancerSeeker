@@ -930,3 +930,23 @@ nav.navbar.bootsnav .navbar-toggle i{color: #ff545a;}
 .row-flex {
 display:flex;
 justify-content:space-evenly;}
+
+.heading {
+padding:10px 0px;
+color: #FF545A;
+}
+
+.card-custom {
+border-radius:5px;
+box-shadow:0 0px 5px rgba(71,71,71,.2);
+padding : 40px;
+margin-bottom:50px;
+}
+.btn-custom{
+color: #FF545A;
+box-shadow: 0 0px 5px rgba(71,71,71,.2);
+}
+.btn-custom:hover{
+    background-color: #FF545A;
+    color: white !important;
+}

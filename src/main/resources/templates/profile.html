@@ -8,7 +8,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!--font-family-->
-    <link href="'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i'"
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
 
     <!-- title of site -->
@@ -65,9 +65,9 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <div class="single-how-works no-bg">
-                            <div class="single-how-works-icon">
-                                <i class="flaticon-location-on-road"></i>
-                            </div>
+                        <div class="single-how-works-icon">
+                            <i class="flaticon-location-on-road"></i>
+                        </div>
                         <h2 style="margin-top:10px" th:text="${user.username}"></h2>
                         <div class="row">
                             <form th:action="'/users/' + ${user.id}" id="editProfile" th:method="PUT">
@@ -121,33 +121,37 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row">
+            <div class="row row-flex">
                 <div class="col-md-8">
-                    <div class="container-fluid">
-                        <h2>Create Post</h2>
-                        <form action="/create-post" method="POST">
-                            <div class="form-group">
-                                <input type="text" placeholder="Subject" name="subject" class="form-control"
-                                       style="width: 250px;" required/>
+                    <div class="container-fluid card-custom">
+                        <h2 class="heading">Create Post</h2>
+                        <form action="/create-post" method="POST" class="text-info">
+                            <div class="form-group ">
+                                <label for="subject">Subject:</label>
+                                <input type="text" placeholder="Subject" name="subject" class="form-control" required/>
                             </div>
 
                             <div class="form-group">
-                                <label style="display: inline-block; width: 10%;">Start Date:</label>
+                                <label for="startDate">Start Date:</label>
                                 <input type="date" placeholder="Start Date" name="startDate" class="form-control"
-                                       style="display: inline-block; width: 25%; " required/>
-
-                                <label style="display: inline-block; width: 10%;margin-left:20px;">End Date:</label>
-                                <input type="date" placeholder="End Date" name="endDate" class="form-control"
-                                       style="display: inline-block; width: 25%;"/>
+                                       required/>
                             </div>
+
                             <div class="form-group">
+                                <label for="endDate">End Date:</label>
+                                <input type="date" placeholder="End Date" name="endDate" class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="body">Body:</label>
                                 <textarea placeholder="Body" name="body" required class="form-control"></textarea>
                             </div>
+
                             <div class="form-group">
-                                <button type="submit" class="welcome-hero-btn how-work-btn">Create</button>
+                                <button type="submit" class="btn btn-custom">Create</button>
                             </div>
                         </form>
+
                     </div>
 
 
@@ -269,6 +273,7 @@ updateForms.forEach(form => {
     });
   });
 });
+
 
 </script>
 <script th:src="@{/assets/js/jquery.js}"></script>
