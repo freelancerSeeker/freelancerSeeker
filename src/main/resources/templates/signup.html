@@ -15,6 +15,7 @@
         .error {
             color: red;
         }
+
     </style>
 </head>
 <body>
@@ -22,6 +23,10 @@
 <br>
 <div class="cont">
     <div class="form sign-in">
+        <div th:if="${param.usernameError}" th:text="${param.usernameError}" class="alert alert-danger"></div>
+        <div th:if="${param.error}" class="alert alert-danger text-center">
+            Username or password incorrect
+        </div>
         <h2>Welcome</h2>
         <form action="/perform_login" method="POST" onsubmit="return formValidate('usernames', 'passwords')">
             <label>
@@ -51,7 +56,8 @@
         </div>
         <div class="form sign-up">
             <h2>Create Your Account</h2>
-            <form action="/signup" method="POST" id="userSignupForm" onsubmit="return formValidate('username', 'email', 'password')">
+            <form action="/signup" method="POST" id="userSignupForm"
+                  onsubmit="return formValidate('email', 'password')">
                 <label>
                     <span>Username</span>
                     <input type="text" name="username" id="username">
@@ -108,16 +114,13 @@
         return inputPassword.length >= 5 && letterPattern.test(inputPassword) && numberPattern.test(inputPassword);
     }
 
-  function formValidate(usernameId, emailId, passwordId) {
-    const username = document.getElementById(usernameId).value;
+  function formValidate(emailId, passwordId) {
+
     const email = document.getElementById(emailId);
     const password = document.getElementById(passwordId);
-    const usernameError = document.getElementById("usernameError");
     const emailError = document.getElementById(emailId + "Error");
     const passwordError = document.getElementById(passwordId + "Error");
 
-
-    usernameError.innerText = "";
     email.style.borderColor = "";
     emailError.innerText = "";
     password.style.borderColor = "";
@@ -137,21 +140,9 @@
         isValid = false;
     }
 
-
-    const request = new XMLHttpRequest();
-    request.open("POST", `/signup`, true);
-
-    request.onload = function () {
-        if (request.status === 400||request.status === 404) {
-            usernameError.innerText = "Username already exists. Please choose a different username.";
-            isValid = false;
-        }
-    };
-
-    request.send();
-
     return isValid;
 }
+
 
 
 
