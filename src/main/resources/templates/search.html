@@ -8,11 +8,11 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!--font-family-->
-    <link href="'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i'"
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
 
     <!-- title of site -->
-    <title>Directory Landing Page</title>
+    <title>FreeLancer Seeker</title>
 
     <!-- For favicon png -->
     <link rel="shortcut icon" type="image/icon" th:href="@{/assets/logo/favicon.png}"/>
@@ -86,20 +86,26 @@
                 <div th:each="post:${posts}" class=" col-md-4 col-sm-6">
 
                     <div class="single-how-works">
+                        <h1 th:text="${post.user.username}"></h1>
 
-                        <h2 th:text="${post.subject}"></h2>
+                        <h2 style="margin-top:10px;" th:text="${post.subject}"></h2>
+                        <h3 style="margin-top:10px;" th:text="'At ' + ${#dates.format(post.createdAt, 'hh:MM')} + ' In ' + ${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></h3>
+
 
                         <p th:text="${post.body}" style="margin-top:20px"></p>
-                        <p th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></p>
+                        <p th:text="'StartDate: ' + ${#dates.format(post.startDate, 'yyyy-MM-dd')}"></p>
                     </div>
                 </div>
-
-
-
-
-
             </div>
         </div>
+        <div class="pagination" style="width:50%">
+            <ul style="display:flex;flex-wrap:wrap;justify-content:space-evenly">
+                <li th:if="${currentPage > 1}"><a th:href="@{/search/{subject}(subject=${subject},page=1)}" class="prev">Previous</a></li>
+                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
+                    <a th:href="@{/search/{subject}(subject=${subject},page=${pageNumber})}" class="page" th:text="${pageNumber}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages}"><a th:href="@{/search/{subject}(subject=${subject},page=${totalPages})}" class="next">Next</a></li>
+            </ul>
     </div><!--/.container-->
 
 </section><!--/.explore-->

@@ -1,9 +1,14 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
+import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +30,9 @@ public class UserAuthenticationController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    PostsRepository postsRepo;
+
 
     @GetMapping("/login")
     public String login(Principal p) {
@@ -35,14 +43,20 @@ public class UserAuthenticationController {
         return "signup";
     }
 
-
     @GetMapping("/")
-    public String getHome(Principal p, Model homeModel) {
+    public String getHome(Principal p, Model homeModel, @RequestParam(required = false, defaultValue = "0") int page) {
+        Pageable pageable= PageRequest.of(page,9);
+        Page<PostsEntity> posts=postsRepo.findAllByOrderByCreatedAtDesc(pageable);
+        homeModel.addAttribute("postList",posts.getContent());
+        homeModel.addAttribute("Page", page);
+        homeModel.addAttribute("totalPages", posts.getTotalPages());
+
         if (p != null) {
             String username = p.getName();
             homeModel.addAttribute("username", username);
             return "home";
         }
+
         return "home";
     }
 

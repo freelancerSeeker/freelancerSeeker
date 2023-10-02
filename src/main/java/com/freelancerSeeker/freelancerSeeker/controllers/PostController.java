@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+
 import java.security.Principal;
 import java.util.Date;
 
@@ -56,7 +57,7 @@ public class PostController {
     public String getPostById(@PathVariable Long postId,Model model){
         PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
         model.addAttribute("postDetails",post);
-        return "home";
+        return "profile"+postId;
     }
 //    @PutMapping("/Posts/{postId}")
 //    public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
@@ -69,14 +70,14 @@ public class PostController {
 //        return new RedirectView("/Posts/"+postId);
 //    }
 
-//    @GetMapping("/home")
-//    public String getAllPosts( Model model){
-//        List<PostsEntity> posts=postsRepo.findAll();
-//        model.addAttribute("posts",posts);
-//        return "home.html";
-//    }
+   // @GetMapping("/home")
+   // public String getAllPosts( Model model){
+     //  List<PostsEntity> posts=postsRepo.findAll();
+      // model.addAttribute("posts",posts);
+      //  return "home.html";
+//}
 
-    @PutMapping("/Posts/{postId}")
+    /*@PutMapping("/Posts/{postId}")
     public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
         PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
         post.setSubject(subject);
@@ -85,17 +86,33 @@ public class PostController {
         post.setEndDate(endDate);
         postsRepo.save(post);
         return new RedirectView("/Posts/"+postId);
-    }
+    }*/
 
-    @DeleteMapping("/posts/{postId}")
+    /*@DeleteMapping("/posts/{postId}")
     public RedirectView deletePost(@PathVariable Long postId){
         postsRepo.deleteById(postId);
         return new RedirectView("/home");
+    }*//*stopped by marwa*/
+
+    @DeleteMapping("/posts/delete/{id}")
+    public RedirectView deletePost(@PathVariable long id, Principal p) {
+        postsRepo.deleteById(id);
+        return new RedirectView("/profile/" +p.getName());
     }
+    @PutMapping("/posts/{id}")
+    public RedirectView updatePost(@PathVariable long id, Principal p,@RequestParam ("subject")String subject,  @RequestParam ("body") String body, @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate, @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  endDate) {
+        PostsEntity post = postsRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 
+        post.setSubject(subject);
+        post.setBody(body);
+        post.setStartDate(startDate);
+        post.setEndDate(endDate);
 
-
-
-
-
+        postsRepo.save(post);
+        return new RedirectView("/profile/"+p.getName());
+    }
 }
+
+
+
+
