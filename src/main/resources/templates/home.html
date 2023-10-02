@@ -95,12 +95,12 @@
             <div class="welcome-hero-form">
                 <div class="single-welcome-hero-form">
                     <h3>what?</h3>
-                    <form action="index.html">
-                        <input type="text" placeholder="Ex: java, engineer, adobe" />
+                    <form id="search-form" action="/search-post" method="POST">
+                        <input type="text" name="subject" placeholder="Ex: java, engineer, adobe" />
                     </form>
-                    <div class="welcome-hero-form-icon">
-                        <i class="flaticon-list-with-dots"></i>
-                    </div>
+<!--                    <div class="welcome-hero-form-icon">-->
+<!--                        <i class="flaticon-list-with-dots"></i>-->
+<!--                    </div>-->
                 </div>
 <!--                <div class="single-welcome-hero-form">-->
 <!--                    <h3>location</h3>-->
@@ -113,7 +113,7 @@
 <!--                </div>-->
             </div>
             <div class="welcome-hero-serch">
-                <button class="welcome-hero-btn" onclick="window.location.href='#'">
+                <button  id="search-button" class="welcome-hero-btn" type="button" >
                     search  <i data-feather="search"></i>
                 </button>
             </div>
@@ -658,6 +658,18 @@
 <!--footer end-->
 
 <!-- Include all js compiled plugins (below), or include individual files as needed -->
+
+<script>
+
+    const searchForm = document.getElementById('search-form');
+    const searchButton = document.getElementById('search-button');
+
+
+    searchButton.addEventListener('click', function() {
+
+        searchForm.submit();
+    });
+</script>
 
 <script src="assets/js/jquery.js"></script>
 

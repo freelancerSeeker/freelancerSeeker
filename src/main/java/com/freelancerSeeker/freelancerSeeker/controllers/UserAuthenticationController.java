@@ -4,16 +4,14 @@ import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
@@ -29,16 +27,20 @@ public class UserAuthenticationController {
 
 
     @GetMapping("/login")
-    public String login() {
-        return "signup.html";
+    public String login(Principal p) {
+        if (alreadyLoggedIn(p))
+        {
+            return "redirect:/profile/" + p.getName();
+        }
+        return "signup";
     }
 
 
     @GetMapping("/")
-    public String getHome(Principal p , Model homeModel) {
-        if (p != null){
+    public String getHome(Principal p, Model homeModel) {
+        if (p != null) {
             String username = p.getName();
-            homeModel.addAttribute("username",username);
+            homeModel.addAttribute("username", username);
             return "home";
         }
         return "home";
@@ -51,10 +53,10 @@ public class UserAuthenticationController {
     }
 
     @GetMapping("/about")
-    public String getAbout(Principal p , Model aboutModel) {
-        if (p != null){
+    public String getAbout(Principal p, Model aboutModel) {
+        if (p != null) {
             String username = p.getName();
-            aboutModel.addAttribute("username",username);
+            aboutModel.addAttribute("username", username);
             return "about";
         }
         return "about";
@@ -62,42 +64,30 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
-    public RedirectView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
-        if (userSiteRepo.findByUsername(username) != null) {
-            // Username already exists, add an error message to the model
-            model.addAttribute("usernameError", "Username already exists. Please choose a different username.");
-            return new RedirectView("/signup");
+    public ModelAndView signupNormalUser(Principal p,@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (alreadyLoggedIn(p)){
+            modelAndView.setViewName("redirect:/profile/" + p.getName());
         }
-
-        String encryptedPassword = passwordEncoder.encode(password);
-        UserSiteEntity usersite = new UserSiteEntity();
-        usersite.setUsername(username);
-        usersite.setPassword(encryptedPassword);
-        usersite.setDescription(description);
-        usersite.setEmail(email);
-        usersite.setFirstname(firstname);
-        usersite.setLastname(lastname);
-        usersite.setRoles(Role.valueOf(role));
-        userSiteRepo.save(usersite);
-
-        System.out.println(usersite.getUsername());
-
-        return new RedirectView("/login");
+        if (userSiteRepo.findByUsername(username) != null) {
+            modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
+            modelAndView.setViewName("redirect:/login");
+        } else {
+            String encryptedPassword = passwordEncoder.encode(password);
+            UserSiteEntity usersite = new UserSiteEntity();
+            usersite.setUsername(username);
+            usersite.setPassword(encryptedPassword);
+            usersite.setDescription(description);
+            usersite.setEmail(email);
+            usersite.setFirstname(firstname);
+            usersite.setLastname(lastname);
+            usersite.setRoles(Role.valueOf(role));
+            userSiteRepo.save(usersite);
+            System.out.println(usersite.getUsername());
+            modelAndView.setViewName("redirect:/login");
+        }
+        return modelAndView;
     }
-
-//    @PostMapping("/signup/check-username")
-//    @ResponseBody
-//    public ResponseEntity<String> checkUsernameAvailability(@RequestParam String username) {
-//        if (userSiteRepo.findByUsername(username) != null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body("Username already exists. Please choose a different username.");
-//        }
-//
-//        return ResponseEntity.ok("Username is available");
-//    }
-
-
-
 
     public RedirectView authWithHttpServletRequest(String username, String password) {
 
@@ -109,6 +99,8 @@ public class UserAuthenticationController {
         return new RedirectView("/signup");
     }
 
-
+    private boolean alreadyLoggedIn(Principal p) {
+        return p != null;
+    }
 
 }

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>search</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!--font-family-->
+    <link href="'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i'"
+          rel="stylesheet">
+
+    <!-- title of site -->
+    <title>Directory Landing Page</title>
+
+    <!-- For favicon png -->
+    <link rel="shortcut icon" type="image/icon" th:href="@{/assets/logo/favicon.png}"/>
+
+    <!--font-awesome.min.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/font-awesome.min.css}">
+
+    <!--linear icon css-->
+    <link rel="stylesheet" th:href="@{/assets/css/linearicons.css}">
+
+    <!--animate.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/animate.css}">
+
+    <!--flaticon.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+
+    <!--slick.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick-theme.css}">
+
+    <!--bootstrap.min.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+
+    <!-- bootsnav -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootsnav.css}">
+
+    <!--style.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+    <!--responsive.css-->
+    <link rel="stylesheet" th:href="@{/assets/css/responsive.css}">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<header  id="header-top" class="header-top">
+    <ul>
+        <li class="head-responsive-right pull-right">
+            <div class="header-top-right">
+                <ul>
+                    <li class="header-top-contact">
+                        <a href="/signup">sign in</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+</header>
+<!--/.header-top-->
+<!--header-top end -->
+
+<!-- top-area Start -->
+<section th:replace="/fragments/header-nav :: header"></section>
+<!-- top-area End -->
+<section id="explore" class="explore">
+    <div class="container">
+        <div class="section-header">
+            <h2>Search results for "<span th:text="${subject}"></span>"</h2>
+
+        </div><!--/.section-header-->
+        <div class="explore-content">
+            <div class="row">
+                <div th:each="post:${posts}" class=" col-md-4 col-sm-6">
+
+                    <div class="single-how-works">
+                        <h1 th:text="${post.user.username}"></h1>
+
+                        <h2 style="margin-top:10px;" th:text="${post.subject}"></h2>
+                        <h3 style="margin-top:10px;" th:text="'At ' + ${#dates.format(post.createdAt, 'hh:MM')} + ' In ' + ${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></h3>
+
+
+                        <p th:text="${post.body}" style="margin-top:20px"></p>
+                        <p th:text="'StartDate: ' + ${#dates.format(post.startDate, 'yyyy-MM-dd')}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pagination" style="width:50%">
+            <ul style="display:flex;flex-wrap:wrap;justify-content:space-evenly">
+                <li th:if="${currentPage > 1}"><a th:href="@{/search/{subject}(subject=${subject},page=1)}" class="prev">Previous</a></li>
+                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
+                    <a th:href="@{/search/{subject}(subject=${subject},page=${pageNumber})}" class="page" th:text="${pageNumber}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages}"><a th:href="@{/search/{subject}(subject=${subject},page=${totalPages})}" class="next">Next</a></li>
+            </ul>
+    </div><!--/.container-->
+
+</section><!--/.explore-->
+<footer id="footer"  class="footer">
+    <div class="container">
+        <div class="footer-menu">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="index.html">FreeLancer<span>Seeker</span></a>
+                    </div><!--/.navbar-header-->
+                </div>
+                <div class="col-sm-9">
+                    <ul class="footer-menu-item">
+                        <li class="scroll"><a href="#works">how it works</a></li>
+                        <li class="scroll"><a href="#explore">explore</a></li>
+                        <li class="scroll"><a href="/reviews">review</a></li>
+                        <li class="scroll"><a href="/about">About us</a></li>
+                    </ul><!--/.nav -->
+                </div>
+            </div>
+        </div>
+        <div class="hm-footer-copyright">
+            <div class="row">
+                <div class="col-sm-5">
+
+                </div>
+                <div class="col-sm-7">
+                    <div class="footer-social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                        <a href="#"><i class="fa fa-google-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div><!--/.hm-footer-copyright-->
+    </div><!--/.container-->
+
+    <div id="scroll-Top">
+        <div class="return-to-top">
+            <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+        </div>
+
+    </div><!--/.scroll-Top-->
+
+</footer><!--/.footer-->
+<!--footer end-->
+<script th:src="@{/assets/js/jquery.js}"></script>
+
+<!--modernizr.min.js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+<!--bootstrap.min.js-->
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+
+<!-- bootsnav js -->
+<script th:src="@{/assets/js/bootsnav.js}"></script>
+
+<!--feather.min.js-->
+<script th:src="@{/assets/js/feather.min.js}"></script>
+
+<!-- counter js -->
+<script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
+<script th:src="@{/assets/js/waypoints.min.js}"></script>
+
+<!--slick.min.js-->
+<script th:src="@{/assets/js/slick.min.js}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+<!--Custom JS-->
+<script th:src="@{/assets/js/custom.js}"></script>
+</body>
+</html>
