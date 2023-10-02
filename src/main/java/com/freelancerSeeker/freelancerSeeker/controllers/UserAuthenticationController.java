@@ -86,16 +86,6 @@ public class UserAuthenticationController {
         return modelAndView;
     }
 
-//    @PostMapping("/signup/check-username")
-//    @ResponseBody
-//    public ResponseEntity<String> checkUsernameAvailability(@RequestParam String username) {
-//        if (userSiteRepo.findByUsername(username) != null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body("Username already exists. Please choose a different username.");
-//        }
-//
-//        return ResponseEntity.ok("Username is available");
-//    }
 
 
     public RedirectView authWithHttpServletRequest(String username, String password) {
