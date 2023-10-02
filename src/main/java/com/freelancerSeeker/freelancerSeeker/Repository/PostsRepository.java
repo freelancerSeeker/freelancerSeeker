@@ -21,5 +21,6 @@ public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
 
     Page<PostsEntity> findBySubjectContaining(String subject, Pageable pageable);
 
+    Page<PostsEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }
 
