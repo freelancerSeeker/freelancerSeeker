@@ -1,5 +1,6 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
+import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
@@ -10,11 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class ProfileController {
     @Autowired
     UserSiteRepository userSiteRepo;
+    @Autowired
+    PostsRepository postsRepository;
 
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
