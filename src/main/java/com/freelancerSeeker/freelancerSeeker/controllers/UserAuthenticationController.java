@@ -4,18 +4,14 @@ import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
@@ -92,7 +88,6 @@ public class UserAuthenticationController {
         }
         return modelAndView;
     }
-
 
     public RedirectView authWithHttpServletRequest(String username, String password) {
 

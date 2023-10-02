@@ -1,22 +1,13 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
-import antlr.StringUtils;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 
 @Controller
