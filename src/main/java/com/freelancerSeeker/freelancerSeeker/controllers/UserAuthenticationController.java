@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -36,8 +37,7 @@ public class UserAuthenticationController {
 
     @GetMapping("/login")
     public String login(Principal p) {
-        if (alreadyLoggedIn(p))
-        {
+        if (isAlreadyLoggedIn(p)) {
             return "redirect:/profile/" + p.getName();
         }
         return "signup";
@@ -45,9 +45,9 @@ public class UserAuthenticationController {
 
     @GetMapping("/")
     public String getHome(Principal p, Model homeModel, @RequestParam(required = false, defaultValue = "0") int page) {
-        Pageable pageable= PageRequest.of(page,9);
-        Page<PostsEntity> posts=postsRepo.findAllByOrderByCreatedAtDesc(pageable);
-        homeModel.addAttribute("postList",posts.getContent());
+        Pageable pageable = PageRequest.of(page, 9);
+        Page<PostsEntity> posts = postsRepo.findAllByOrderByCreatedAtDesc(pageable);
+        homeModel.addAttribute("postList", posts.getContent());
         homeModel.addAttribute("Page", page);
         homeModel.addAttribute("totalPages", posts.getTotalPages());
 
@@ -61,10 +61,10 @@ public class UserAuthenticationController {
     }
 
 
-    @GetMapping("/reviews")
+   /* @GetMapping("/reviews")
     public String getReviews() {
         return "reviews";
-    }
+    }*/
 
     @GetMapping("/about")
     public String getAbout(Principal p, Model aboutModel) {
@@ -92,7 +92,9 @@ public class UserAuthenticationController {
 
         username = username.trim();
 
-        if (alreadyLoggedIn(p)) {
+
+        if (isAlreadyLoggedIn(p)) {
+
             modelAndView.setViewName("redirect:/profile/" + p.getName());
         } else if (username.isEmpty() || username.isBlank()) {
 
@@ -101,27 +103,38 @@ public class UserAuthenticationController {
         } else if (userSiteRepo.findByUsername(username) != null) {
             modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
             modelAndView.setViewName("redirect:/login");
-        }
-        else if (userSiteRepo.findByEmail(email) != null) {
+
+        } else if (userSiteRepo.findByEmail(email) != null) {
             modelAndView.addObject("usernameError", "Email already exists. Please choose a different email.");
             modelAndView.setViewName("redirect:/login");
-        }else {
-            String encryptedPassword = passwordEncoder.encode(password);
-            UserSiteEntity usersite = new UserSiteEntity();
-            usersite.setUsername(username);
-            usersite.setPassword(encryptedPassword);
-            usersite.setDescription(description);
-            usersite.setEmail(email);
-            usersite.setFirstname(firstname);
-            usersite.setLastname(lastname);
-            usersite.setRoles(Role.valueOf(role));
-            userSiteRepo.save(usersite);
-            System.out.println(usersite.getUsername());
-            modelAndView.setViewName("redirect:/login");
+        } else {
+            if (isPasswordValidated(password)) {
+                String encryptedPassword = passwordEncoder.encode(password);
+                UserSiteEntity usersite = new UserSiteEntity();
+                usersite.setUsername(username);
+                usersite.setPassword(encryptedPassword);
+                usersite.setDescription(description);
+                usersite.setEmail(email);
+                usersite.setFirstname(firstname);
+                usersite.setLastname(lastname);
+                usersite.setRoles(Role.valueOf(role));
+                userSiteRepo.save(usersite);
+                System.out.println(usersite.getUsername());
+                modelAndView.setViewName("redirect:/login");
+            } else {
+                modelAndView.addObject("usernameError", "Password should be 8 character including uppercase.");
+                modelAndView.setViewName("redirect:/login");
+            }
         }
         return modelAndView;
     }
-    public RedirectView authWithHttpServletRequest(String username, String password) {
+
+
+
+    @PostMapping("/login")
+    public RedirectView authWithHttpServletRequest(@RequestParam String username, @RequestParam String password) {
+
+
 
         try {
             request.login(username, password);
@@ -129,10 +142,20 @@ public class UserAuthenticationController {
             e.printStackTrace();
         }
         return new RedirectView("/signup");
+
+
     }
 
-    private boolean alreadyLoggedIn(Principal p) {
+    private boolean isAlreadyLoggedIn(Principal p) {
         return p != null;
     }
 
+    private boolean isPasswordValidated(String password) {
+        if (password.length() < 7) {
+            return false;
+        } else {
+            return password.matches("^(?=.*[a-zA-Z])(?=.*[0-9]).+$");
+        }
+    }
 }
+
