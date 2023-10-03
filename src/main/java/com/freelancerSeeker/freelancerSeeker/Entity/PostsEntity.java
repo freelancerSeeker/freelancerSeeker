@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,13 +27,18 @@ public class PostsEntity {
     private String body;
     @Column(name = "createdAd")
     private Date createdAt;
-    @Column(name = "startDate",nullable = false)
+    @Column(name = "startDate", nullable = false)
     private Date startDate;
     @Column(name = "endDate")
     private Date endDate;
     @ManyToOne
     private UserSiteEntity user;
+    @ManyToMany(mappedBy = "posts")
+    private Set<TagsEntity> tags;
 
+    public void addTag(TagsEntity tag){
+        this.tags.add(tag);
+    }
 
 
 }

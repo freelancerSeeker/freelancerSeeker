@@ -1,21 +1,22 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
+import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
@@ -29,20 +30,33 @@ public class UserAuthenticationController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    PostsRepository postsRepo;
+
 
     @GetMapping("/login")
-    public String login() {
-        return "signup.html";
+    public String login(Principal p) {
+        if (alreadyLoggedIn(p))
+        {
+            return "redirect:/profile/" + p.getName();
+        }
+        return "signup";
     }
 
-
     @GetMapping("/")
-    public String getHome(Principal p, Model homeModel) {
+    public String getHome(Principal p, Model homeModel, @RequestParam(required = false, defaultValue = "0") int page) {
+        Pageable pageable= PageRequest.of(page,9);
+        Page<PostsEntity> posts=postsRepo.findAllByOrderByCreatedAtDesc(pageable);
+        homeModel.addAttribute("postList",posts.getContent());
+        homeModel.addAttribute("Page", page);
+        homeModel.addAttribute("totalPages", posts.getTotalPages());
+
         if (p != null) {
             String username = p.getName();
             homeModel.addAttribute("username", username);
             return "home";
         }
+
         return "home";
     }
 
@@ -64,24 +78,17 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
-    public ModelAndView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String country, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role,
-            Model model) {
+
+    public ModelAndView signupNormalUser(Principal p,@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-
-
-        if (username.isEmpty() || password.isEmpty() || country.isEmpty() ||
-                description.isEmpty() || email.isEmpty() || firstname.isEmpty() || lastname.isEmpty()) {
-            modelAndView.addObject("error", "Please fill out all required fields.");
-            modelAndView.setViewName("signupPage");
-            return modelAndView;
+        if (alreadyLoggedIn(p)){
+            modelAndView.setViewName("redirect:/profile/" + p.getName());
         }
-
-        // Check if the username already exists
         if (userSiteRepo.findByUsername(username) != null) {
             modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
-            modelAndView.setViewName("signupPage"); // Return to the signup page
-            return modelAndView; // Return immediately to avoid further processing
-        }
+            modelAndView.setViewName("redirect:/login");
+        } else {
+          
 
         String encryptedPassword = passwordEncoder.encode(password);
         UserSiteEntity usersite = new UserSiteEntity();
@@ -95,14 +102,16 @@ public class UserAuthenticationController {
         usersite.setRoles(Role.valueOf(role));
         userSiteRepo.save(usersite);
         System.out.println(usersite.getUsername());
-
+        }
         // Redirect to the login page after successful registration
         modelAndView.setViewName("redirect:/login");
         return modelAndView;
     }
 
+
     @PostMapping("/login")
     public RedirectView authWithHttpServletRequest(@RequestParam String username, @RequestParam String password) {
+
 
         try {
             request.login(username, password);
@@ -110,4 +119,13 @@ public class UserAuthenticationController {
             e.printStackTrace();
         }
         return new RedirectView("/signup");
-    }}
+
+
+    }
+
+    private boolean alreadyLoggedIn(Principal p) {
+        return p != null;
+    }
+
+}
+
