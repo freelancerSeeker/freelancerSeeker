@@ -64,41 +64,45 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
-    public ModelAndView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
+    public ModelAndView signupNormalUser(@RequestParam String username, @RequestParam String password, @RequestParam String country, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role,
+            Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        if (userSiteRepo.findByUsername(username) != null) {
-            modelAndView.addObject("usernameError","Username already exists. Please choose a different username.");
-            modelAndView.setViewName("redirect:/login");
-        } else {
-            String encryptedPassword = passwordEncoder.encode(password);
-            UserSiteEntity usersite = new UserSiteEntity();
-            usersite.setUsername(username);
-            usersite.setPassword(encryptedPassword);
-            usersite.setDescription(description);
-            usersite.setEmail(email);
-            usersite.setFirstname(firstname);
-            usersite.setLastname(lastname);
-            usersite.setRoles(Role.valueOf(role));
-            userSiteRepo.save(usersite);
-            System.out.println(usersite.getUsername());
-            modelAndView.setViewName("redirect:/login");
+
+
+        if (username.isEmpty() || password.isEmpty() || country.isEmpty() ||
+                description.isEmpty() || email.isEmpty() || firstname.isEmpty() || lastname.isEmpty()) {
+            modelAndView.addObject("error", "Please fill out all required fields.");
+            modelAndView.setViewName("signupPage");
+            return modelAndView;
         }
+
+        // Check if the username already exists
+        if (userSiteRepo.findByUsername(username) != null) {
+            modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
+            modelAndView.setViewName("signupPage"); // Return to the signup page
+            return modelAndView; // Return immediately to avoid further processing
+        }
+
+        String encryptedPassword = passwordEncoder.encode(password);
+        UserSiteEntity usersite = new UserSiteEntity();
+        usersite.setUsername(username);
+        usersite.setPassword(encryptedPassword);
+        usersite.setCountry(country);
+        usersite.setDescription(description);
+        usersite.setEmail(email);
+        usersite.setFirstname(firstname);
+        usersite.setLastname(lastname);
+        usersite.setRoles(Role.valueOf(role));
+        userSiteRepo.save(usersite);
+        System.out.println(usersite.getUsername());
+
+        // Redirect to the login page after successful registration
+        modelAndView.setViewName("redirect:/login");
         return modelAndView;
     }
 
-//    @PostMapping("/signup/check-username")
-//    @ResponseBody
-//    public ResponseEntity<String> checkUsernameAvailability(@RequestParam String username) {
-//        if (userSiteRepo.findByUsername(username) != null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body("Username already exists. Please choose a different username.");
-//        }
-//
-//        return ResponseEntity.ok("Username is available");
-//    }
-
-
-    public RedirectView authWithHttpServletRequest(String username, String password) {
+    @PostMapping("/login")
+    public RedirectView authWithHttpServletRequest(@RequestParam String username, @RequestParam String password) {
 
         try {
             request.login(username, password);
@@ -106,7 +110,4 @@ public class UserAuthenticationController {
             e.printStackTrace();
         }
         return new RedirectView("/signup");
-    }
-
-
-}
+    }}

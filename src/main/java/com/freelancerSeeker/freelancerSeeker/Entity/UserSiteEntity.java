@@ -36,6 +36,8 @@ public class UserSiteEntity implements UserDetails {
     private String firstname;
     @Column(name = "lastName",nullable = false)
     private String lastname;
+    @Column(name = "country")
+    private String country;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<PostsEntity> posts;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
