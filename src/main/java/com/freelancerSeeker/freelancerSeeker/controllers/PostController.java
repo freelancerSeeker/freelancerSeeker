@@ -102,12 +102,10 @@ public class PostController {
     @PutMapping("/posts/{id}")
     public RedirectView updatePost(@PathVariable long id, Principal p,@RequestParam ("subject")String subject,  @RequestParam ("body") String body, @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate, @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  endDate) {
         PostsEntity post = postsRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
-
         post.setSubject(subject);
         post.setBody(body);
         post.setStartDate(startDate);
         post.setEndDate(endDate);
-
         postsRepo.save(post);
         return new RedirectView("/profile/"+p.getName());
     }
