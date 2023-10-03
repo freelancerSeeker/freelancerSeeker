@@ -98,8 +98,8 @@
                 </div>
             </div>
         </div>
-        <div class="pagination" style="width:50%">
-            <ul style="display:flex;flex-wrap:wrap;justify-content:space-evenly">
+        <div class="" style="width:50%">
+            <ul class="pagination" style="display:flex;flex-wrap:wrap;justify-content:space-evenly">
                 <li th:if="${currentPage > 1}"><a th:href="@{/search/{subject}(subject=${subject},page=1)}" class="prev">Previous</a></li>
                 <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
                     <a th:href="@{/search/{subject}(subject=${subject},page=${pageNumber})}" class="page" th:text="${pageNumber}"></a>

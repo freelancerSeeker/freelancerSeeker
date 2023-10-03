@@ -950,3 +950,22 @@ box-shadow: 0 0px 5px rgba(71,71,71,.2);
     background-color: #FF545A;
     color: white !important;
 }
+.pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        color: #333;
+    }
+
+    .pagination a:hover {
+        background-color: #f5f5f5;
+    }
