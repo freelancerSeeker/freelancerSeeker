@@ -78,6 +78,7 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
+
     public ModelAndView signupNormalUser(Principal p,@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         if (alreadyLoggedIn(p)){
@@ -87,23 +88,30 @@ public class UserAuthenticationController {
             modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
             modelAndView.setViewName("redirect:/login");
         } else {
-            String encryptedPassword = passwordEncoder.encode(password);
-            UserSiteEntity usersite = new UserSiteEntity();
-            usersite.setUsername(username);
-            usersite.setPassword(encryptedPassword);
-            usersite.setDescription(description);
-            usersite.setEmail(email);
-            usersite.setFirstname(firstname);
-            usersite.setLastname(lastname);
-            usersite.setRoles(Role.valueOf(role));
-            userSiteRepo.save(usersite);
-            System.out.println(usersite.getUsername());
-            modelAndView.setViewName("redirect:/login");
+          
+
+        String encryptedPassword = passwordEncoder.encode(password);
+        UserSiteEntity usersite = new UserSiteEntity();
+        usersite.setUsername(username);
+        usersite.setPassword(encryptedPassword);
+        usersite.setCountry(country);
+        usersite.setDescription(description);
+        usersite.setEmail(email);
+        usersite.setFirstname(firstname);
+        usersite.setLastname(lastname);
+        usersite.setRoles(Role.valueOf(role));
+        userSiteRepo.save(usersite);
+        System.out.println(usersite.getUsername());
         }
+        // Redirect to the login page after successful registration
+        modelAndView.setViewName("redirect:/login");
         return modelAndView;
     }
 
-    public RedirectView authWithHttpServletRequest(String username, String password) {
+
+    @PostMapping("/login")
+    public RedirectView authWithHttpServletRequest(@RequestParam String username, @RequestParam String password) {
+
 
         try {
             request.login(username, password);
@@ -111,6 +119,8 @@ public class UserAuthenticationController {
             e.printStackTrace();
         }
         return new RedirectView("/signup");
+
+
     }
 
     private boolean alreadyLoggedIn(Principal p) {
@@ -118,3 +128,4 @@ public class UserAuthenticationController {
     }
 
 }
+
