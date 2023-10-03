@@ -74,7 +74,7 @@ public class ProfileController {
         existingUser.setLastname(lastname);
         userSiteRepo.save(existingUser);
         return new RedirectView("/profile/" + existingUser.getUsername());
-    }
+    }}
 
 
 
@@ -83,6 +83,7 @@ public class ProfileController {
 
 
 
-    }
+
+
 
 
