@@ -95,6 +95,7 @@ public class UserAuthenticationController {
         if (isAlreadyLoggedIn(p)) {
             modelAndView.setViewName("redirect:/profile/" + p.getName());
         } else if (username.isEmpty() || username.isBlank()) {
+
             modelAndView.addObject("usernameError", "Username cannot be empty or contain only whitespace.");
             modelAndView.setViewName("redirect:/login");
         } else if (userSiteRepo.findByUsername(username) != null) {
@@ -104,7 +105,7 @@ public class UserAuthenticationController {
             modelAndView.addObject("usernameError", "Email already exists. Please choose a different email.");
             modelAndView.setViewName("redirect:/login");
         } else {
-            if (handlePassword(password)) {
+            if (isPasswordValidated(password)) {
                 String encryptedPassword = passwordEncoder.encode(password);
                 UserSiteEntity usersite = new UserSiteEntity();
                 usersite.setUsername(username);
@@ -125,7 +126,10 @@ public class UserAuthenticationController {
         return modelAndView;
     }
 
-    public RedirectView authWithHttpServletRequest(String username, String password) {
+
+    @PostMapping("/login")
+    public RedirectView authWithHttpServletRequest(@RequestParam String username, @RequestParam String password) {
+
 
         try {
             request.login(username, password);
@@ -133,13 +137,15 @@ public class UserAuthenticationController {
             e.printStackTrace();
         }
         return new RedirectView("/signup");
+
+
     }
 
     private boolean isAlreadyLoggedIn(Principal p) {
         return p != null;
     }
 
-    private boolean handlePassword(String password) {
+    private boolean isPasswordValidated(String password) {
         if (password.length() < 7) {
             return false;
         } else {
@@ -147,3 +153,4 @@ public class UserAuthenticationController {
         }
     }
 }
+
