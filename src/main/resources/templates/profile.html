@@ -126,7 +126,7 @@
                                             <!--                                            <button type="submit">Save Skills</button>-->
                                             <!--                                        </form>-->
                                 <button type="submit" id="editBtn" style="margin-top:20px;"
-                                        class="welcome-hero-btn how-work-btn" onclick="enableEditing()">
+                                        class="welcome-hero-btn how-work-btn" onclick="enableEditing()" th:if="${username == loggedUsername}">
                                     Edit profile
                                 </button>
                             </form>
@@ -136,7 +136,8 @@
                 </div>
             </div>
 
-            <div class="row row-flex">
+            <div class="row row-flex" th:if="${username == loggedUsername}">
+
                 <div class="col-md-8">
                     <div class="container-fluid card-custom">
                         <h2 class="heading">Create Post</h2>
@@ -182,7 +183,7 @@
                         <p th:text="${posts.body}" style="margin-top:20px"></p>
                         <p th:text="${#dates.format(posts.createdAt, 'yyyy-MM-dd')}"></p>
 
-                        <form th:action="'/posts/' + ${posts.id}" th:method="PUT">
+                        <form th:action="'/posts/' + ${posts.id}" th:method="PUT" th:if="${username == loggedUsername}">
                             <div class="form-group">
                                 <label for="subject">Subject:</label>
                                 <input type="text" class="form-control" id="subject" name="subject" th:value="${posts.subject}" >
@@ -199,12 +200,12 @@
                                 <label for="endDate">End Date:</label>
                                 <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(posts.endDate, 'yyyy-MM-dd')}" >
                             </div>
-                            <button type="submit" class="update-btn welcome-hero-btn how-work-btn ">Update</button>
+                            <button type="submit" class="update-btn welcome-hero-btn how-work-btn " th:if="${username == loggedUsername}">Update</button>
                         </form>
                         <form th:action="'/posts/delete/' + ${posts.id}" method="post">
 
                             <input type="hidden" value="DELETE">
-                            <button type="button" class="delete-btn welcome-hero-btn how-work-btn ">Delete</button>
+                            <button type="button" class="delete-btn welcome-hero-btn how-work-btn "th:if="${username == loggedUsername}">Delete</button>
 
                         </form>
                     </div>

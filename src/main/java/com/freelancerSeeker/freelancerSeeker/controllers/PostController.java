@@ -27,16 +27,18 @@ public class PostController {
     UserSiteRepository userSiteRepo;
 
     @PostMapping("/create-post")
-    public RedirectView createPost(Principal principal, @RequestParam("subject") String subject,
-                                   @RequestParam("body") String body,
-                                   @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                                   @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        if (principal != null) {
-            String username = principal.getName();
-            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
-            if (userSite != null) {
-                PostsEntity post = new PostsEntity();
-                post.setSubject(subject);
+
+    public RedirectView createPost(Principal principal, @RequestParam ("subject")String subject,
+                                   @RequestParam ("body") String body,
+                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate,
+                                   @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  endDate){
+        if(principal!=null){
+            String username=principal.getName();
+            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            if(userSite!=null){
+                PostsEntity post=new PostsEntity();
+                post.setSubject(subject.toLowerCase());
+
                 post.setBody(body);
                 post.setStartDate(startDate);
                 post.setEndDate(endDate);

@@ -22,7 +22,7 @@
                         <li class=""><a href="/reviews">review</a></li>
                         <li class=""><a href="/about">About us</a></li>
                         <li th:if="!${username}" class="" ><a href="/login" >sign in</a></li>
-                        <li th:if="${username}"><a th:text="${username}" th:href="'/profile/'+ ${username} ">sign in</a></li>
+
                         <li>
                             <form th:if="${username}" th:action="'/perform_logout'">
                                 <button style="margin-top:10px" class="welcome-hero-btn" type="submit"> Log out</button>
