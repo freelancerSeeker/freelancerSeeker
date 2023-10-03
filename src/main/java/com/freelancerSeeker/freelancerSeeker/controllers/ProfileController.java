@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +37,10 @@ public class ProfileController {
     }
 
     @PutMapping("/freelancer/{id}")
+
     public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber,@RequestParam String country,@RequestParam List<String> skills) {
         UserSiteEntity userSite= userSiteRepo.findById(id).orElseThrow();
+
         userSite.setUsername(username);
         userSite.setCountry(country);
         userSite.setEmail(email);
@@ -61,7 +62,9 @@ public class ProfileController {
     }
 
     @PutMapping("/users/{id}")
+
     public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String description, @RequestParam String email, @RequestParam String country) {
+
         UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();
 
         existingUser.setDescription(description);
