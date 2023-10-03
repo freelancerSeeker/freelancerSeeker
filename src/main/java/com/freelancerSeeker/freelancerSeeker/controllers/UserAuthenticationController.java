@@ -61,10 +61,10 @@ public class UserAuthenticationController {
     }
 
 
-    @GetMapping("/reviews")
+   /* @GetMapping("/reviews")
     public String getReviews() {
         return "reviews";
-    }
+    }*/
 
     @GetMapping("/about")
     public String getAbout(Principal p, Model aboutModel) {
@@ -92,7 +92,9 @@ public class UserAuthenticationController {
 
         username = username.trim();
 
+
         if (isAlreadyLoggedIn(p)) {
+
             modelAndView.setViewName("redirect:/profile/" + p.getName());
         } else if (username.isEmpty() || username.isBlank()) {
 
@@ -101,6 +103,7 @@ public class UserAuthenticationController {
         } else if (userSiteRepo.findByUsername(username) != null) {
             modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
             modelAndView.setViewName("redirect:/login");
+
         } else if (userSiteRepo.findByEmail(email) != null) {
             modelAndView.addObject("usernameError", "Email already exists. Please choose a different email.");
             modelAndView.setViewName("redirect:/login");
@@ -127,8 +130,10 @@ public class UserAuthenticationController {
     }
 
 
+
     @PostMapping("/login")
     public RedirectView authWithHttpServletRequest(@RequestParam String username, @RequestParam String password) {
+
 
 
         try {

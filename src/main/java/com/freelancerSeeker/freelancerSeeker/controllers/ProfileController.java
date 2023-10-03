@@ -27,14 +27,18 @@ public class ProfileController {
 
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
-        if (p != null) {
-            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+        UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+        if(userSite!=null && p!=null)
+        {
+                String logedUser= p.getName();
+
             m.addAttribute("user", userSite);
             m.addAttribute("post", userSite.getPosts());
+            m.addAttribute("loggedUsername", logedUser);
             return "profile";
 
         }
-        return "home";
+        return "redirect:/";
     }
 
     @PutMapping("/freelancer/{id}")
@@ -67,7 +71,9 @@ public class ProfileController {
         existingUser.setLastname(lastname);
         userSiteRepo.save(existingUser);
         return new RedirectView("/profile/" + existingUser.getUsername());
-    }
+    }}
+
+
 
     @PostMapping("/user/skill/{id}")
     public RedirectView updateFreeLancerSkill(@PathVariable Long id,@RequestParam String skillName) {
@@ -87,6 +93,5 @@ public class ProfileController {
 
 
 
-    }
 
 
