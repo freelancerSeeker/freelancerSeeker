@@ -63,14 +63,14 @@
         </div><!--/.section-header-->
         <div class="works-content">
             <div class="row">
-                <div th:if="${user.roles.name == 'FREELANCER'}" class="col-md-2 col-md-12">
+                <div  th:if="${user.roles.name == 'FREELANCER'}" class="col-md-2 col-md-12">
                     <div class="container" style="width:auto;">
                         <h4 class="heading">Skill List</h4>
                         <ul class="my-scrollable-element">
                             <li th:each="skill: ${user.skillsList}" class="list-group p-5"
                                 th:text="${skill.skill}"></li>
                         </ul>
-                        <button th:data-id="${user.id}" class="btn btn-custom" data-toggle="modal"
+                        <button th:if="${username == loggedUsername}" th:data-id="${user.id}" class="btn btn-custom" data-toggle="modal"
                                 data-target="#skillModal"
                                 th:text="'Add Skills'">Add skills
                         </button>
@@ -150,15 +150,10 @@
 
                                         </div>
                                         <button type="submit" id="editBtn" style="margin-top:20px;"
-                                                class="welcome-hero-btn how-work-btn" onclick="enableEditing()">
+                                                class="welcome-hero-btn how-work-btn" onclick="enableEditing()" th:if="${username == loggedUsername}">
                                             Edit profile
                                         </button>
                                     </div>
-                                    <button type="submit" id="editBtn" style="margin-top:20px;"
-                                            class="welcome-hero-btn how-work-btn" onclick="enableEditing()"
-                                            th:if="${username == loggedUsername}">
-                                        Edit profile
-                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -378,6 +373,7 @@ function applySkill(skillName) {
   document.body.appendChild(form);
   form.submit();
 }
+
 
 
 
