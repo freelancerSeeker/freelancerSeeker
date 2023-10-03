@@ -36,6 +36,8 @@ public class UserSiteEntity implements UserDetails {
     private String firstname;
     @Column(name = "lastName",nullable = false)
     private String lastname;
+    @Column(name = "country")
+    private String country;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<PostsEntity> posts;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
@@ -44,6 +46,10 @@ public class UserSiteEntity implements UserDetails {
     private Role roles;
     @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
     private List<SkillsEntity> skillsList;
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<ReviewEntity> reviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

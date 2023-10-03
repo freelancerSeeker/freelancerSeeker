@@ -70,8 +70,12 @@
                 </label>
                 <p id="passwordError" class="error"></p>
                 <label>
-                    <span>Description</span>
-                    <input type="text" name="description">
+                    <span>Country</span>
+                    <input type="text" name="country">
+                </label>
+                <label>
+                <span>Description</span>
+                <input type="text" name="description">
                 </label>
                 <label>
                     <span>Email</span>
@@ -87,11 +91,9 @@
                     <input type="text" class="form-style" name="lastname">
                 </label>
                 <label>
-                    <span>Sign Up As</span>
-                    <select name="role" id="role">
-                        <option value="USER">User</option>
-                        <option value="FREELANCER">Freelancer</option>
-                    </select>
+                    <label>Sign up as</label>
+                    <input type="radio" name="role" value="USER" >
+                    <input type="radio" name="role" value="FREELANCER" >
                 </label>
                 <button type="submit" class="submit">Sign Up</button>
             </form>
