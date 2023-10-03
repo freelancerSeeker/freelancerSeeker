@@ -78,15 +78,34 @@ public class UserAuthenticationController {
 
 
     @PostMapping("/signup")
-    public ModelAndView signupNormalUser(Principal p,@RequestParam String username, @RequestParam String password, @RequestParam String description, @RequestParam String email, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String role, Model model) {
+    public ModelAndView signupNormalUser(Principal p,
+                                         @RequestParam String username,
+                                         @RequestParam String password,
+                                         @RequestParam String description,
+                                         @RequestParam String email,
+                                         @RequestParam String firstname,
+                                         @RequestParam String lastname,
+                                         @RequestParam String role,
+                                         Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        if (alreadyLoggedIn(p)){
+
+
+        username = username.trim();
+
+        if (alreadyLoggedIn(p)) {
             modelAndView.setViewName("redirect:/profile/" + p.getName());
-        }
-        if (userSiteRepo.findByUsername(username) != null) {
+        } else if (username.isEmpty() || username.isBlank()) {
+
+            modelAndView.addObject("usernameError", "Username cannot be empty or contain only whitespace.");
+            modelAndView.setViewName("redirect:/login");
+        } else if (userSiteRepo.findByUsername(username) != null) {
             modelAndView.addObject("usernameError", "Username already exists. Please choose a different username.");
             modelAndView.setViewName("redirect:/login");
-        } else {
+        }
+        else if (userSiteRepo.findByEmail(email) != null) {
+            modelAndView.addObject("usernameError", "Email already exists. Please choose a different email.");
+            modelAndView.setViewName("redirect:/login");
+        }else {
             String encryptedPassword = passwordEncoder.encode(password);
             UserSiteEntity usersite = new UserSiteEntity();
             usersite.setUsername(username);
@@ -102,7 +121,6 @@ public class UserAuthenticationController {
         }
         return modelAndView;
     }
-
     public RedirectView authWithHttpServletRequest(String username, String password) {
 
         try {

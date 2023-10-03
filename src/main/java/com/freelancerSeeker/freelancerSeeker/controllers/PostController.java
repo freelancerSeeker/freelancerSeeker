@@ -36,7 +36,7 @@ public class PostController {
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
             if(userSite!=null){
                 PostsEntity post=new PostsEntity();
-                post.setSubject(subject);
+                post.setSubject(subject.toLowerCase());
                 post.setBody(body);
                 post.setStartDate(startDate);
                 post.setEndDate(endDate);

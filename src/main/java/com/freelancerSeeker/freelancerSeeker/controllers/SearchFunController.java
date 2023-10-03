@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class SearchFunController {
@@ -34,7 +35,7 @@ public class SearchFunController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", postPage.getTotalPages());
 
-//        List<PostsEntity> post = postsRepository.findBySubjectContainingOrderByCreatedAtDesc(subject);
+
         model.addAttribute("posts",post);
         if(principal!=null)
         {
@@ -54,7 +55,7 @@ public class SearchFunController {
         if(principal!=null)
         {
             String username = principal.getName();
-            List<PostsEntity> post= postsRepository.findBySubjectContainingOrderByCreatedAtDesc(subject);
+            List<PostsEntity> post= postsRepository.findBySubjectContainingOrderByCreatedAtDesc(subject.toLowerCase());
 
 
             model.addAttribute("posts",post);
