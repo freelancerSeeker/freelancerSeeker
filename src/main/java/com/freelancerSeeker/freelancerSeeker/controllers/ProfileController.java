@@ -2,6 +2,7 @@ package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.SkillsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.SkillsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
@@ -53,14 +54,6 @@ public class ProfileController {
 
 
 
-    @GetMapping("/api/skills")
-    @ResponseBody
-    public List<String> getSkillsByKeyword(@RequestParam String keyword) {
-
-        List<String> skills = SkillsRepository.getSkillsByKeyword(keyword);
-        return skills;
-    }
-
     @PutMapping("/users/{id}")
 
     public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String description, @RequestParam String email, @RequestParam String country) {
@@ -74,6 +67,17 @@ public class ProfileController {
         existingUser.setLastname(lastname);
         userSiteRepo.save(existingUser);
         return new RedirectView("/profile/" + existingUser.getUsername());
+    }
+
+    @PostMapping("/user/skill/{id}")
+    public RedirectView updateFreeLancerSkill(@PathVariable Long id,@RequestParam String skillName) {
+        UserSiteEntity user = userSiteRepo.findById(id).orElseThrow();
+        SkillsEntity skill = new SkillsEntity();
+        skill.setSkill(skillName);
+        skill.setUsersite(user);
+        user.getSkillsList().add(skill);
+        userSiteRepo.save(user);
+        return new RedirectView("/profile/" + user.getUsername());
     }
 
 
