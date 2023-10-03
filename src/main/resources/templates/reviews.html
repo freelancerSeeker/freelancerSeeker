@@ -57,20 +57,40 @@
 <section th:replace="/fragments/header-nav :: header"></section>
 <section id="reviews" class="reviews">
   <div class="section-header">
+
     <h2 th:text="${freelancerName}"></h2>
+
+    <h2>clients reviews</h2>
+    <div class="welcome-hero-serch-box">
+      <div class="welcome-hero-form">
+        <div class="single-welcome-hero-form">
+          <h3>Search Reviews</h3>
+          <form action="/search-reviews" method="GET">
+            <input type="text" name="query" placeholder="Ex: java, engineer, adobe" />
+            <button type="submit">
+              <i class="flaticon-list-with-dots"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="welcome-hero-serch">
+        <button class="welcome-hero-btn" onclick="window.location.href='#'">
+          Search <i data-feather="search"></i>
+        </button>
+      </div>
+    </div>
     <p>What our client say about us</p>
   </div><!--/.section-header-->
   <div class="reviews-content">
     <div class="testimonial-carousel">
-      <div class="single-testimonial-box">
+      <div  th:each="review : ${reviews}" class="single-testimonial-box">
         <div class="testimonial-description">
           <div class="testimonial-info">
             <div class="testimonial-img">
               <img src="assets/images/clients/c1.png" alt="clients">
             </div><!--/.testimonial-img-->
             <div class="testimonial-person">
-              <h2>Tom Leakar</h2>
-              <h4>london, UK</h4>
+              <h2 th:text="${review.user.firstname + ' ' + review.user.lastname}"></h2>
               <div class="testimonial-person-star">
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star"></i>
@@ -81,7 +101,8 @@
             </div><!--/.testimonial-person-->
           </div><!--/.testimonial-info-->
           <div class="testimonial-comment">
-            <p th:text="${userName}"></p>
+            <h4 th:text="${review.user.username}"></h4>
+            <p th:text="${review.description}"></p>
           </div><!--/.testimonial-comment-->
         </div><!--/.testimonial-description-->
       </div><!--/.single-testimonial-box-->
