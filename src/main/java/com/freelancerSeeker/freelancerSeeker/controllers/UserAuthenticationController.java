@@ -61,10 +61,10 @@ public class UserAuthenticationController {
     }
 
 
-    @GetMapping("/reviews")
+   /* @GetMapping("/reviews")
     public String getReviews() {
         return "reviews";
-    }
+    }*/
 
     @GetMapping("/about")
     public String getAbout(Principal p, Model aboutModel) {

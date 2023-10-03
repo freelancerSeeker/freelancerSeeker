@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <!-- meta data -->
   <meta charset="utf-8">
@@ -57,6 +57,9 @@
 <section th:replace="/fragments/header-nav :: header"></section>
 <section id="reviews" class="reviews">
   <div class="section-header">
+
+    <h2 th:text="${freelancerName}"></h2>
+
     <h2>clients reviews</h2>
     <div class="welcome-hero-serch-box">
       <div class="welcome-hero-form">
@@ -76,7 +79,6 @@
         </button>
       </div>
     </div>
-
     <p>What our client say about us</p>
   </div><!--/.section-header-->
   <div class="reviews-content">
@@ -100,9 +102,7 @@
             </div><!--/.testimonial-person-->
           </div><!--/.testimonial-info-->
           <div class="testimonial-comment">
-            <p>
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis eaque.
-            </p>
+            <p th:text="${userName}"></p>
           </div><!--/.testimonial-comment-->
         </div><!--/.testimonial-description-->
       </div><!--/.single-testimonial-box-->
