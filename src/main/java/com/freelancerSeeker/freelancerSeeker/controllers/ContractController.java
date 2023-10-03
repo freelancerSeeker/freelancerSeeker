@@ -7,6 +7,7 @@ import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Repository.ContractsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -27,12 +29,21 @@ public class ContractController {
     UserSiteRepository userSiteRepo;
 
     @PostMapping("/create-contract")
-    public RedirectView createContract(Principal principal,String subject,String startDate,String endDate,double pricePerHour,String body){
+    public RedirectView createContract(Principal principal, @RequestParam ("subject")String subject,
+                                       @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                       @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
+                                       @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
         if (principal!=null){
             String username=principal.getName();
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
             if (userSite!=null&&userSite.getRoles()== Role.FREELANCER){
-                ContractEntity contract=new ContractEntity(subject,startDate,endDate,pricePerHour,body,userSite);
+                ContractEntity contract=new ContractEntity();
+                contract.setSubject(subject);
+                contract.setStartDate(startDate);
+                contract.setEndDate(endDate);
+                contract.setPricePerHour(pricePerHour);
+                contract.setBody(body);
+                contract.setUser(userSite);
                 contract.setCreatedAt(LocalDate.now());
                 contractsRepo.save(contract);
                 return new RedirectView("/profile");
@@ -56,14 +67,17 @@ public class ContractController {
         return "contract.html";
     }
 
-    @DeleteMapping("/contracts/{contractId}")
+    @DeleteMapping("/contracts/delete/{contractId}")
     public RedirectView deleteContract(@PathVariable Long contractId){
         contractsRepo.deleteById(contractId);
         return new RedirectView("/profile");
     }
 
     @PutMapping("/contracts/{contractId}")
-    public RedirectView updatePost(@PathVariable Long contractId,String subject,String startDate,String endDate,double pricePerHour,String body){
+    public RedirectView updatePost(@PathVariable Long contractId, @RequestParam ("subject")String subject,
+                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                   @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
+                                   @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
         ContractEntity contract =contractsRepo.findById(contractId).orElseThrow(()->new ResourceNotFoundException());
         contract.setSubject(subject);
         contract.setStartDate(startDate);

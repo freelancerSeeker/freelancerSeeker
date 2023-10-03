@@ -45,6 +45,9 @@ public class UserSiteEntity implements UserDetails {
     @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
     private List<SkillsEntity> skillsList;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority("USER"));
