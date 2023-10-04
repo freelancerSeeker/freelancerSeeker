@@ -27,6 +27,7 @@ public class PostController {
     UserSiteRepository userSiteRepo;
 
     @PostMapping("/create-post")
+
     public RedirectView createPost(Principal principal, @RequestParam ("subject")String subject,
                                    @RequestParam ("body") String body,
                                    @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate,
@@ -36,7 +37,8 @@ public class PostController {
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
             if(userSite!=null){
                 PostsEntity post=new PostsEntity();
-                post.setSubject(subject);
+                post.setSubject(subject.toLowerCase());
+
                 post.setBody(body);
                 post.setStartDate(startDate);
                 post.setEndDate(endDate);
@@ -44,7 +46,7 @@ public class PostController {
                 post.setCreatedAt(new Date());
                 postsRepo.save(post);
                 System.out.println(endDate);
-                return new RedirectView("profile/"+principal.getName() );
+                return new RedirectView("profile/" + principal.getName());
 
             }
         }
@@ -52,8 +54,8 @@ public class PostController {
     }
 
 
-
     @GetMapping("/Posts/{postId}")
+
     public String getPostById(Principal principal,@PathVariable Long postId,Model model){
         if(principal!=null){
             String username=principal.getName();
@@ -68,58 +70,24 @@ public class PostController {
         }
 
         return "post";
+
     }
-//    @PutMapping("/Posts/{postId}")
-//    public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
-//        PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
-//        post.setSubject(subject);
-//        post.setBody(body);
-//        post.setStartDate(startDate);
-//        post.setEndDate(endDate);
-//        postsRepo.save(post);
-//        return new RedirectView("/Posts/"+postId);
-//    }
-
-   // @GetMapping("/home")
-   // public String getAllPosts( Model model){
-     //  List<PostsEntity> posts=postsRepo.findAll();
-      // model.addAttribute("posts",posts);
-      //  return "home.html";
-//}
-
-    /*@PutMapping("/Posts/{postId}")
-    public RedirectView updatePost(@PathVariable Long postId,String subject, String body, Date startDate, Date  endDate){
-        PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
-        post.setSubject(subject);
-        post.setBody(body);
-        post.setStartDate(startDate);
-        post.setEndDate(endDate);
-        postsRepo.save(post);
-        return new RedirectView("/Posts/"+postId);
-    }*/
-
-    /*@DeleteMapping("/posts/{postId}")
-    public RedirectView deletePost(@PathVariable Long postId){
-        postsRepo.deleteById(postId);
-        return new RedirectView("/home");
-    }*//*stopped by marwa*/
 
     @DeleteMapping("/posts/delete/{id}")
     public RedirectView deletePost(@PathVariable long id, Principal p) {
         postsRepo.deleteById(id);
-        return new RedirectView("/profile/" +p.getName());
+        return new RedirectView("/profile/" + p.getName());
     }
-    @PutMapping("/posts/{id}")
-    public RedirectView updatePost(@PathVariable long id, Principal p,@RequestParam ("subject")String subject,  @RequestParam ("body") String body, @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate, @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  endDate) {
-        PostsEntity post = postsRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 
+    @PutMapping("/posts/{id}")
+    public RedirectView updatePost(@PathVariable long id, Principal p, @RequestParam("subject") String subject, @RequestParam("body") String body, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        PostsEntity post = postsRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
         post.setSubject(subject);
         post.setBody(body);
         post.setStartDate(startDate);
         post.setEndDate(endDate);
-
         postsRepo.save(post);
-        return new RedirectView("/profile/"+p.getName());
+        return new RedirectView("/profile/" + p.getName());
     }
 }
 
