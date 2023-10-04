@@ -63,7 +63,38 @@
         </div><!--/.section-header-->
         <div class="works-content">
             <div class="row">
-                <div class="col-md-12 col-sm-12">
+                <div  th:if="${user.roles.name == 'FREELANCER'}" class="col-md-2 col-md-12">
+                    <div class="container" style="width:auto;">
+                        <h4 class="heading">Skill List</h4>
+                        <ul class="my-scrollable-element">
+                            <li th:each="skill: ${user.skillsList}" class="list-group p-5"
+                                th:text="${skill.skill}"></li>
+                        </ul>
+                        <button th:if="${username == loggedUsername}" th:data-id="${user.id}" class="btn btn-custom" data-toggle="modal"
+                                data-target="#skillModal"
+                                th:text="'Add Skills'">Add skills
+                        </button>
+                        <div class="modal fade" id="skillModal" tabindex="-1" role="dialog"
+                             aria-labelledby="skillModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="skillModalLabel">Skill Search</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="text" id="skillSearchInput" placeholder="Search skills...">
+                                        <button onclick="searchSkills()">Search</button>
+                                        <div id="skillResults"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-12">
                     <div class="single-how-works no-bg">
                         <div class="single-how-works-icon">
                             <i class="flaticon-location-on-road"></i>
@@ -102,33 +133,28 @@
                                             <span class="input-group-addon"><i
                                                     class="glyphicon glyphicon-envelope"></i></span>
                                         </div>
-                                        <div class="form-group"  style="margin-top:10px">
+                                        <div class="form-group" style="margin-top:10px">
                                             <label for="country">Country:</label>
-                                            <div class="input-group"  >
+                                            <div class="input-group">
                                                 <input type="text" class="form-control" id="country" name="country"
                                                        th:value="${user.country}"
-                                                       required disabled  >
+                                                       required disabled>
                                                 <span class="input-group-addon"><i></i></span>
                                             </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="description">Description:</label>
-                                        <textarea class="form-control" id="description" name="description"
-                                                  th:text="${user.description}"
-                                                  required disabled></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Description:</label>
+                                            <textarea class="form-control" id="description" name="description"
+                                                      th:text="${user.description}"
+                                                      required disabled></textarea>
 
+                                        </div>
+                                        <button type="submit" id="editBtn" style="margin-top:20px;"
+                                                class="welcome-hero-btn how-work-btn" onclick="enableEditing()" th:if="${username == loggedUsername}">
+                                            Edit profile
+                                        </button>
                                     </div>
-<!--                                        <div class="form-group" th:if="${user.roles == 'FREELANCER'}">&ndash;&gt;-->
-                                            <!--                                        <form th:action="@{/freelancer/{id}}" method="post" id="skillForm">-->
-                                            <!--                                            <input type="text" id="keyword" name="keyword" placeholder="Enter a keyword">-->
-                                            <!--                                            <select id="skillSelect" name="skills" multiple="multiple">-->
-                                            <!--                                            </select>-->
-                                            <!--                                            <button type="submit">Save Skills</button>-->
-                                            <!--                                        </form>-->
-                                <button type="submit" id="editBtn" style="margin-top:20px;"
-                                        class="welcome-hero-btn how-work-btn" onclick="enableEditing()" th:if="${username == loggedUsername}">
-                                    Edit profile
-                                </button>
+                                </div>
                             </form>
                         </div>
 
@@ -186,26 +212,34 @@
                         <form th:action="'/posts/' + ${posts.id}" th:method="PUT" th:if="${username == loggedUsername}">
                             <div class="form-group">
                                 <label for="subject">Subject:</label>
-                                <input type="text" class="form-control" id="subject" name="subject" th:value="${posts.subject}" >
+                                <input type="text" class="form-control" id="subject" name="subject"
+                                       th:value="${posts.subject}">
                             </div>
                             <div class="form-group">
                                 <label for="body">Body:</label>
-                                <textarea class="form-control" id="body" name="body" required th:text="${posts.body}"></textarea>
+                                <textarea class="form-control" id="body" name="body" required
+                                          th:text="${posts.body}"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="startDate">Start Date:</label>
-                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(posts.startDate, 'yyyy-MM-dd')}" >
+                                <input type="date" class="form-control" id="startDate" name="startDate"
+                                       th:value="${#dates.format(posts.startDate, 'yyyy-MM-dd')}">
                             </div>
                             <div class="form-group">
                                 <label for="endDate">End Date:</label>
-                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(posts.endDate, 'yyyy-MM-dd')}" >
+                                <input type="date" class="form-control" id="endDate" name="endDate"
+                                       th:value="${#dates.format(posts.endDate, 'yyyy-MM-dd')}">
                             </div>
-                            <button type="submit" class="update-btn welcome-hero-btn how-work-btn " th:if="${username == loggedUsername}">Update</button>
+                            <button type="submit" class="update-btn welcome-hero-btn how-work-btn "
+                                    th:if="${username == loggedUsername}">Update
+                            </button>
                         </form>
                         <form th:action="'/posts/delete/' + ${posts.id}" method="post">
 
                             <input type="hidden" value="DELETE">
-                            <button type="button" class="delete-btn welcome-hero-btn how-work-btn "th:if="${username == loggedUsername}">Delete</button>
+                            <button type="button" class="delete-btn welcome-hero-btn how-work-btn "
+                                    th:if="${username == loggedUsername}">Delete
+                            </button>
 
                         </form>
                     </div>
@@ -290,6 +324,58 @@ updateForms.forEach(form => {
     });
   });
 });
+
+function searchSkills() {
+  var skillName = document.getElementById('skillSearchInput').value;
+
+  fetch('/skill/search/' + skillName)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      var skillResultsDiv = document.getElementById('skillResults');
+      skillResultsDiv.innerHTML = '';
+      data.matches.forEach(match => {
+        var matchDiv = document.createElement('div');
+        matchDiv.classList.add('container');
+        match.skills.forEach(skill => {
+          var skillButton = document.createElement('button');
+          skillButton.innerText = skill.name;
+          skillButton.classList.add('btn', 'btn-custom');
+          skillButton.addEventListener('click', function() {
+            applySkill(skill.name);
+          });
+
+          matchDiv.appendChild(skillButton);
+        });
+
+        skillResultsDiv.appendChild(matchDiv);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching skills:', error);
+    });
+}
+
+function applySkill(skillName) {
+  var userId = document.querySelector('.btn.btn-custom[data-toggle="modal"][data-target="#skillModal"]').getAttribute('data-id');
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/user/skill/' + userId;
+  var skillInput = document.createElement('input');
+  skillInput.type = 'hidden';
+  skillInput.name = 'skillName';
+  skillInput.value = skillName;
+  form.appendChild(skillInput);
+  document.body.appendChild(form);
+  form.submit();
+}
+
+
+
 
 </script>
 <script th:src="@{/assets/js/jquery.js}"></script>

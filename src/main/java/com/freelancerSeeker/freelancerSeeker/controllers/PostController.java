@@ -55,10 +55,22 @@ public class PostController {
 
 
     @GetMapping("/Posts/{postId}")
-    public String getPostById(@PathVariable Long postId, Model model) {
-        PostsEntity post = postsRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException());
-        model.addAttribute("postDetails", post);
-        return "profile" + postId;
+
+    public String getPostById(Principal principal,@PathVariable Long postId,Model model){
+        if(principal!=null){
+            String username=principal.getName();
+            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            if(userSite!=null){
+                PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
+                model.addAttribute("postDetails",post);
+                model.addAttribute("postDetailsWithComments",post.getComments());
+                model.addAttribute("logedinUser",userSite);
+                return "post";
+            }
+        }
+
+        return "post";
+
     }
 
     @DeleteMapping("/posts/delete/{id}")

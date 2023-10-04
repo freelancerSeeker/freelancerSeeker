@@ -35,6 +35,8 @@ public class PostsEntity {
     private UserSiteEntity user;
     @ManyToMany(mappedBy = "posts")
     private Set<TagsEntity> tags;
+    @OneToMany(mappedBy = "posts",cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
 
     public void addTag(TagsEntity tag){
         this.tags.add(tag);

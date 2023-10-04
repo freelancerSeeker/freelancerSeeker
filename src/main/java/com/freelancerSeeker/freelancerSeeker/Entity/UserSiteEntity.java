@@ -49,7 +49,12 @@ public class UserSiteEntity implements UserDetails {
 
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<ReviewEntity> reviews;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

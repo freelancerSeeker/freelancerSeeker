@@ -151,10 +151,10 @@ public class UserAuthenticationController {
     }
 
     private boolean isPasswordValidated(String password) {
-        if (password.length() < 7) {
+        if (password.length() < 8) {
             return false;
         } else {
-            return password.matches("^(?=.*[a-zA-Z])(?=.*[0-9]).+$");
+            return password.matches("^(?=.*[a-z])(?=.*[A-Z]).+$");
         }
     }
 }

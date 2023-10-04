@@ -2,6 +2,7 @@ package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.SkillsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.SkillsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
@@ -27,10 +28,8 @@ public class ProfileController {
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
         UserSiteEntity userSite = userSiteRepo.findByUsername(username);
-        if(userSite!=null && p!=null)
-        {
-                String logedUser= p.getName();
-
+        if (userSite != null && p != null) {
+            String logedUser = p.getName();
             m.addAttribute("user", userSite);
             m.addAttribute("post", userSite.getPosts());
             m.addAttribute("loggedUsername", logedUser);
@@ -42,8 +41,8 @@ public class ProfileController {
 
     @PutMapping("/freelancer/{id}")
 
-    public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber,@RequestParam String country,@RequestParam List<String> skills) {
-        UserSiteEntity userSite= userSiteRepo.findById(id).orElseThrow();
+    public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber, @RequestParam String country, @RequestParam List<String> skills) {
+        UserSiteEntity userSite = userSiteRepo.findById(id).orElseThrow();
 
         userSite.setUsername(username);
         userSite.setCountry(country);
@@ -55,15 +54,6 @@ public class ProfileController {
         return new RedirectView("/freelancer/" + id);
     }
 
-
-
-    @GetMapping("/api/skills")
-    @ResponseBody
-    public List<String> getSkillsByKeyword(@RequestParam String keyword) {
-
-        List<String> skills = SkillsRepository.getSkillsByKeyword(keyword);
-        return skills;
-    }
 
     @PutMapping("/users/{id}")
 
@@ -78,9 +68,20 @@ public class ProfileController {
         existingUser.setLastname(lastname);
         userSiteRepo.save(existingUser);
         return new RedirectView("/profile/" + existingUser.getUsername());
-    }}
+    }
 
 
+    @PostMapping("/user/skill/{id}")
+    public RedirectView updateFreeLancerSkill(@PathVariable Long id, @RequestParam String skillName) {
+        UserSiteEntity user = userSiteRepo.findById(id).orElseThrow();
+        SkillsEntity skill = new SkillsEntity();
+        skill.setSkill(skillName);
+        skill.setUsersite(user);
+        user.getSkillsList().add(skill);
+        userSiteRepo.save(user);
+        return new RedirectView("/profile/" + user.getUsername());
+    }
+}
 
 
 
