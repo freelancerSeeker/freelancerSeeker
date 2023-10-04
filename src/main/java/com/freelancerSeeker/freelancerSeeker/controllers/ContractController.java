@@ -18,6 +18,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ContractController {
@@ -28,11 +29,13 @@ public class ContractController {
     @Autowired
     UserSiteRepository userSiteRepo;
 
+
     @PostMapping("/create-contract")
     public RedirectView createContract(Principal principal, @RequestParam ("subject")String subject,
                                        @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
                                        @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
-                                       @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
+                                       @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body,
+                                       @RequestParam ("approvedBy")String approvedBy){
         if (principal!=null){
             String username=principal.getName();
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
@@ -44,27 +47,68 @@ public class ContractController {
                 contract.setPricePerHour(pricePerHour);
                 contract.setBody(body);
                 contract.setUser(userSite);
-                contract.setCreatedAt(LocalDate.now());
+                contract.setCreatedAt(new Date());
+                contract.setApprovedBy(userSiteRepo.findByUsername(approvedBy));
                 contractsRepo.save(contract);
-                return new RedirectView("/profile");
+                return new RedirectView("/contracts");
             }
         }
 
-        return new RedirectView("/profile");
+        return new RedirectView("/contracts");
     }
 
-    @GetMapping("/home")
-    public String getAllContract(Model model){
-        List<ContractEntity> contracts=contractsRepo.findAll();
-        model.addAttribute("contracts",contracts);
-        return "home.html";
+
+
+    @PostMapping("/approve-contract/{contractId}")
+    public RedirectView approveContract(@PathVariable long contractId, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+
+            if (userSite != null && userSite.getRoles() == Role.USER) {
+                ContractEntity contractEntity = contractsRepo.findById(contractId).orElseThrow(()->new ResourceNotFoundException());
+                if (contractEntity!=null && contractEntity.getApprovedBy().getUsername().equals(username)) {
+                    contractEntity.setApproved(true);
+                    contractsRepo.save(contractEntity);
+                    return new RedirectView("/contracts");
+                }
+            }
+        }
+        return new RedirectView("/contracts");
     }
+
+
+
+
+    @GetMapping("/contracts")
+    public String getAllContract(Principal principal,Model model){
+        if(principal!=null){
+            String username=principal.getName();
+            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            model.addAttribute("username",username);
+            if(userSite!=null&&userSite.getRoles()== Role.FREELANCER){
+                List<ContractEntity> contractEntities=userSite.getContracts();
+                model.addAttribute("contracts",contractEntities);
+                model.addAttribute("user",userSite);
+                return "contract";
+            }else{
+                List<ContractEntity> contractEntities=userSite.getContractsForApprove();
+                model.addAttribute("contracts",contractEntities);
+                model.addAttribute("user",userSite);
+                return "contract";
+            }
+        }
+
+        return "contract";
+    }
+
+
 
     @GetMapping("/contracts/{contractId}")
     public String getContractById(@PathVariable Long contractId,Model model){
         ContractEntity contract=contractsRepo.findById(contractId).orElseThrow(()->new ResourceNotFoundException());
         model.addAttribute("contractDetails",contract);
-        return "contract.html";
+        return "contract";
     }
 
     @DeleteMapping("/contracts/delete/{contractId}")

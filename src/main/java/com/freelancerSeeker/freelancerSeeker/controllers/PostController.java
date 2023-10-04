@@ -63,6 +63,7 @@ public class PostController {
             if(userSite!=null){
                 PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
                 model.addAttribute("postDetails",post);
+                model.addAttribute("username",username);
                 model.addAttribute("postDetailsWithComments",post.getComments());
                 model.addAttribute("logedinUser",userSite);
                 return "post";

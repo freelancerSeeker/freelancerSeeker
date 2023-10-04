@@ -29,9 +29,15 @@ public class ContractEntity {
     private double pricePerHour;
     @Column(name = "body",nullable = false)
     private String body;
-    private LocalDate createdAt;
+    private Date createdAt;
+    @Column(name = "approved")
+    private boolean approved = false;
+
     @ManyToOne
     private UserSiteEntity user;
+    @ManyToOne
+    private UserSiteEntity approvedBy;
+
 
 
 
