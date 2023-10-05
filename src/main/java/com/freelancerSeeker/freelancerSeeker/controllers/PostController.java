@@ -15,6 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -28,22 +29,35 @@ public class PostController {
 
     @PostMapping("/create-post")
 
-    public RedirectView createPost(Principal principal, @RequestParam ("subject")String subject,
-                                   @RequestParam ("body") String body,
-                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate,
-                                   @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  endDate){
-        if(principal!=null){
-            String username=principal.getName();
-            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
-            if(userSite!=null){
-                PostsEntity post=new PostsEntity();
+    public RedirectView createPost(Principal principal, @RequestParam("subject") String subject,
+                                   @RequestParam("body") String body,
+                                   @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                   @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+        if (principal != null) {
+            String username = principal.getName();
+            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+            if (userSite != null) {
+                PostsEntity post = new PostsEntity();
                 post.setSubject(subject.toLowerCase());
 
                 post.setBody(body);
-                post.setStartDate(startDate);
-                post.setEndDate(endDate);
+                if (startDate.isAfter(LocalDate.now())) {
+                    post.setStartDate(startDate);
+                } else {
+                    return new RedirectView("profile/" + principal.getName() + "?Error=Date error");
+                }
+                if (endDate != null) {
+                    if (startDate.isBefore(endDate)) {
+                        post.setEndDate(endDate);
+
+                    } else {
+                        return new RedirectView("profile/" + principal.getName() + "?Error=Date error");
+                    }
+                }
+
+
                 post.setUser(userSite);
-                post.setCreatedAt(new Date());
+                post.setCreatedAt(LocalDate.now());
                 postsRepo.save(post);
                 System.out.println(endDate);
                 return new RedirectView("profile/" + principal.getName());
@@ -56,15 +70,15 @@ public class PostController {
 
     @GetMapping("/Posts/{postId}")
 
-    public String getPostById(Principal principal,@PathVariable Long postId,Model model){
-        if(principal!=null){
-            String username=principal.getName();
-            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
-            if(userSite!=null){
-                PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
-                model.addAttribute("postDetails",post);
-                model.addAttribute("postDetailsWithComments",post.getComments());
-                model.addAttribute("logedinUser",userSite);
+    public String getPostById(Principal principal, @PathVariable Long postId, Model model) {
+        if (principal != null) {
+            String username = principal.getName();
+            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+            if (userSite != null) {
+                PostsEntity post = postsRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException());
+                model.addAttribute("postDetails", post);
+                model.addAttribute("postDetailsWithComments", post.getComments());
+                model.addAttribute("logedinUser", userSite);
                 return "post";
             }
         }
@@ -80,7 +94,9 @@ public class PostController {
     }
 
     @PutMapping("/posts/{id}")
-    public RedirectView updatePost(@PathVariable long id, Principal p, @RequestParam("subject") String subject, @RequestParam("body") String body, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+    public RedirectView updatePost(@PathVariable long id, Principal p, @RequestParam("subject") String subject, @RequestParam("body") String body,
+                                   @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                   @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         PostsEntity post = postsRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
         post.setSubject(subject);
         post.setBody(body);
