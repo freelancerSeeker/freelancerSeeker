@@ -55,7 +55,6 @@ public class PostController {
 
 
     @GetMapping("/Posts/{postId}")
-
     public String getPostById(Principal principal,@PathVariable Long postId,Model model){
         if(principal!=null){
             String username=principal.getName();
@@ -69,7 +68,6 @@ public class PostController {
                 return "post";
             }
         }
-
         return "post";
 
     }

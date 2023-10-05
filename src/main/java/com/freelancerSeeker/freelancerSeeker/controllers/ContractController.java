@@ -102,6 +102,44 @@ public class ContractController {
         return "contract";
     }
 
+    @DeleteMapping("/contracts/delete/{contractId}")
+    public RedirectView deleteContract(Principal principal,@PathVariable Long contractId){
+        if(principal!=null){
+            String username=principal.getName();
+            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            if(userSite!=null&&userSite.getRoles()== Role.FREELANCER){
+                contractsRepo.deleteById(contractId);
+                return new RedirectView("/contracts");
+            }
+        }
+
+        return new RedirectView("/contracts");
+    }
+
+    @PutMapping("/contracts/update/{contractId}")
+    public RedirectView updatePost(Principal principal,@PathVariable Long contractId, @RequestParam ("subject")String subject,
+                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                   @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
+                                   @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
+        if(principal!=null){
+            String username=principal.getName();
+            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            if(userSite!=null&&userSite.getRoles()== Role.FREELANCER){
+                ContractEntity contract =contractsRepo.findById(contractId).orElseThrow(()->new ResourceNotFoundException());
+                if(!contract.isApproved()){
+                    contract.setSubject(subject);
+                    contract.setStartDate(startDate);
+                    contract.setEndDate(endDate);
+                    contract.setPricePerHour(pricePerHour);
+                    contract.setBody(body);
+                    contractsRepo.save(contract);
+                    return new RedirectView("/contracts");
+                }
+            }
+        }
+
+        return new RedirectView("/contracts");
+    }
 
 
     @GetMapping("/contracts/{contractId}")
@@ -111,26 +149,7 @@ public class ContractController {
         return "contract";
     }
 
-    @DeleteMapping("/contracts/delete/{contractId}")
-    public RedirectView deleteContract(@PathVariable Long contractId){
-        contractsRepo.deleteById(contractId);
-        return new RedirectView("/profile");
-    }
 
-    @PutMapping("/contracts/{contractId}")
-    public RedirectView updatePost(@PathVariable Long contractId, @RequestParam ("subject")String subject,
-                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                                   @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
-                                   @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
-        ContractEntity contract =contractsRepo.findById(contractId).orElseThrow(()->new ResourceNotFoundException());
-        contract.setSubject(subject);
-        contract.setStartDate(startDate);
-        contract.setEndDate(endDate);
-        contract.setPricePerHour(pricePerHour);
-        contract.setBody(body);
-        contractsRepo.save(contract);
-        return new RedirectView("/contracts/"+contractId);
-    }
 
 
 
