@@ -55,7 +55,7 @@
 
 </head>
 <body>
-<header  id="header-top" class="header-top">
+<header id="header-top" class="header-top">
     <ul>
         <li class="head-responsive-right pull-right">
             <div class="header-top-right">
@@ -90,16 +90,17 @@
         <div class="section-header">
             <h2>Search results for "<span th:text="${subject}"></span>"</h2>
 
+        </div><!--/.section-header-->
+
         <div class="explore-content">
             <div class="row">
                 <div th:each="post:${posts}" class=" col-md-4 col-sm-6">
-
                     <div class="single-how-works">
                         <h1 th:text="${post.user.username}"></h1>
-
                         <h2 style="margin-top:10px;" th:text="${post.subject}"></h2>
-                        <h3 style="margin-top:10px;" th:text=" ' In ' + ${post.createdAt}"></h3>
-
+                        <h3 style="margin-top:10px;"
+                            th:text="' In ' + ${post.createdAt}"></h3>
+                        <p class="badge badge-custom" th:each="tag : ${post.tags}" th:text="'#' + ${tag.tagName}"></p>
 
                         <p th:text="${post.body}" style="margin-top:20px"></p>
                         <p th:text="'StartDate: ' + ${post.startDate}"></p>
@@ -109,16 +110,20 @@
         </div>
         <div class="">
             <ul class="pagination">
-                <li th:if="${currentPage > 1}"><a th:href="@{/search/{subject}(subject=${subject},page=1)}" class="prev">Previous</a></li>
-                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:classappend="${pageNumber == currentPage} ? 'active' : ''">
-                    <a th:href="@{/search/{subject}(subject=${subject},page=${pageNumber})}" class="page" th:text="${pageNumber}"></a>
+                <li th:if="${currentPage > 1}"><a th:href="@{/search/{subject}(subject=${subject},page=1)}"
+                                                  class="prev">Previous</a></li>
+                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${pageNumber == currentPage} ? 'active' : ''">
+                    <a th:href="@{/search/{subject}(subject=${subject},page=${pageNumber})}" class="page"
+                       th:text="${pageNumber}"></a>
                 </li>
-                <li th:if="${currentPage < totalPages}"><a th:href="@{/search/{subject}(subject=${subject},page=${totalPages})}" class="next">Next</a></li>
+                <li th:if="${currentPage < totalPages}"><a
+                        th:href="@{/search/{subject}(subject=${subject},page=${totalPages})}" class="next">Next</a></li>
             </ul>
-    </div><!--/.container-->
-
+        </div><!--/.container-->
+    </div>
 </section><!--/.explore-->
-<footer id="footer"  class="footer">
+<footer id="footer" class="footer">
     <div class="container">
         <div class="footer-menu">
             <div class="row">
@@ -157,7 +162,8 @@
 
     <div id="scroll-Top">
         <div class="return-to-top">
-            <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+            <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title=""
+               data-original-title="Back to Top" aria-hidden="true"></i>
         </div>
 
     </div><!--/.scroll-Top-->

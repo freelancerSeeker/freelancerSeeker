@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,11 +23,6 @@ public class TagsEntity {
     @Column(name = "tag_name")
     private String tagName;
 
-    @ManyToMany
-    @JoinTable(name = "tag_post",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<PostsEntity> posts;
-
-
+    @ManyToMany(mappedBy = "tags")
+    private Set<PostsEntity> posts = new HashSet<>();
 }

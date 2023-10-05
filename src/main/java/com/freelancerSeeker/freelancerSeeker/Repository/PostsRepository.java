@@ -26,10 +26,11 @@ public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
     Page<PostsEntity> findBySubjectContaining(String subject, Pageable pageable);
 
     Page<PostsEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
-    Page<PostsEntity> findByOrderByCreatedAtDesc(Date createdAt,Pageable pageable);
-    List<PostsEntity> findByCreatedAtContaining(LocalDate createdAt);
 
-    Page<PostsEntity> findBySubjectContainingAndCreatedAtContaining(String subject, LocalDate createdAt, Pageable pageable);
+
+
+
+
 
 
 
@@ -37,6 +38,10 @@ public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
 
 
     Page<PostsEntity> findBySubjectContainingAndStartDate(String subject, LocalDate startDate, Pageable pageable);
+
+
+    Page<PostsEntity> findByTags_TagNameContaining(String tag, Pageable pageable);
+
 }
 
 
