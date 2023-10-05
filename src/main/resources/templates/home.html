@@ -9,7 +9,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!--font-family-->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
 
     <!-- title of site -->
     <title>FreeLancer Seeker</title>
@@ -37,7 +38,7 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
     <!-- bootsnav -->
-    <link rel="stylesheet" href="assets/css/bootsnav.css" >
+    <link rel="stylesheet" href="assets/css/bootsnav.css">
 
     <!--style.css-->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -56,11 +57,12 @@
 
 <body>
 <!--[if lte IE 9]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+    your browser</a> to improve your experience and security.</p>
 <![endif]-->
 
 <!--header-top start -->
-<header  id="header-top" class="header-top">
+<header id="header-top" class="header-top">
     <ul>
         <li class="head-responsive-right pull-right">
             <div class="header-top-right">
@@ -95,25 +97,13 @@
                 <div class="single-welcome-hero-form">
                     <h3>what?</h3>
                     <form id="search-form" action="/search-post" method="POST">
-                        <input type="text" name="subject" placeholder="Ex: java, engineer, adobe" />
+                        <input type="text" name="subject" placeholder="Ex: java, engineer, adobe"/>
                     </form>
-<!--                    <div class="welcome-hero-form-icon">-->
-<!--                        <i class="flaticon-list-with-dots"></i>-->
-<!--                    </div>-->
                 </div>
-<!--                <div class="single-welcome-hero-form">-->
-<!--                    <h3>location</h3>-->
-<!--                    <form action="index.html">-->
-<!--                        <input type="text" placeholder="Ex: london, newyork, rome" />-->
-<!--                    </form>-->
-<!--                    <div class="welcome-hero-form-icon">-->
-<!--                        <i class="flaticon-gps-fixed-indicator"></i>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
             <div class="welcome-hero-serch">
-                <button  id="search-button" class="welcome-hero-btn" type="button" >
-                    search  <i data-feather="search"></i>
+                <button id="search-button" class="welcome-hero-btn" type="button">
+                    search <i data-feather="search"></i>
                 </button>
             </div>
         </div>
@@ -188,8 +178,20 @@
     <div class="container">
         <div class="section-header">
             <h2>explore</h2>
-            <p>Explore New People, Services, Posts around the world and many more</p>
-        </div><!--/.section-header-->
+            <p>
+                Explore New People, Services, Posts around the world and many more
+            </p>
+            <div class="wrap">
+                <div th:if="${param.tag}" th:text="${param.tag}" class="alert alert-danger"></div>
+                <form action="/search/tag" method="post">
+                    <input name="tag" type="text" id="explore-search-bar" placeholder="Search by tag...."/>
+                    <button id="explore-search-button" class="explore-search-button" type="submit">
+                        <i data-feather="search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <!--/.section-header-->
         <div class="explore-content">
             <div class="row">
 
@@ -198,8 +200,9 @@
 
                         <div class="single-explore-txt bg-theme-1">
                             <h2 th:text="${post.user.username}"></h2>
-                            <p th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd  HH:MM')}"> Date </p>
+                            <p th:text="${post.createdAt}"> Date </p>
                             <p th:text="${post.user.roles}">Role</p>
+                            <p th:each="tag : ${post.tags}" class="badge badge-custom" th:text="'#' + ${tag.tagName}">Tag</p>
                             <div class="explore-person">
                                 <div class="row">
 
@@ -215,7 +218,6 @@
                                         <a class="close-btn" th:href="@{'/Posts/'+${post.id}}">View</a>
                                     </div>
 
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -223,6 +225,7 @@
                 </div>
             </div>
         </div>
+    </div>
     <!--/.container-->
 
 </section><!--/.explore-->
@@ -244,20 +247,20 @@
 <!--    Pagination div -->
 <ul class="pagination">
     <li th:if="${Page > 0}">
-        <a th:href="@{'/?page='+${Page-1}}" >Previous</a>
+        <a th:href="@{'/?page='+${Page-1}}">Previous</a>
     </li>
     <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNumber == Page} ? 'active'">
         <a th:href="@{'/?page='+${pageNumber}}" th:text="${pageNumber + 1}"></a>
     </li>
     <li th:if="${Page < totalPages - 1}">
-        <a th:href="@{'/?page='+${Page+1}}" >Next</a>
+        <a th:href="@{'/?page='+${Page+1}}">Next</a>
     </li>
 </ul>
 
 <!-- end of Pagination div -->
 
 <!--footer start-->
-<footer id="footer"  class="footer">
+<footer id="footer" class="footer">
     <div class="container">
         <div class="footer-menu">
             <div class="row">
@@ -296,7 +299,8 @@
 
     <div id="scroll-Top">
         <div class="return-to-top">
-            <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+            <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title=""
+               data-original-title="Back to Top" aria-hidden="true"></i>
         </div>
 
     </div><!--/.scroll-Top-->
@@ -316,6 +320,8 @@
 
         searchForm.submit();
     });
+
+
 </script>
 
 <script src="assets/js/jquery.js"></script>
@@ -330,7 +336,7 @@
 <script src="assets/js/bootsnav.js"></script>
 
 <!--feather.min.js-->
-<script  src="assets/js/feather.min.js"></script>
+<script src="assets/js/feather.min.js"></script>
 
 <!-- counter js -->
 <script src="assets/js/jquery.counterup.min.js"></script>

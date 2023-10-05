@@ -1,10 +1,12 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.PostsEntity;
+import com.freelancerSeeker.freelancerSeeker.Entity.TagsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Exceptions.ResourceNotFoundException;
 
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
+import com.freelancerSeeker.freelancerSeeker.Repository.TagsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -25,25 +28,30 @@ public class PostController {
     PostsRepository postsRepo;
     @Autowired
     UserSiteRepository userSiteRepo;
+    @Autowired
+    TagsRepository tagsRepository;
 
     @PostMapping("/create-post")
 
     public RedirectView createPost(Principal principal, @RequestParam ("subject")String subject,
                                    @RequestParam ("body") String body,
-                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date  startDate,
-                                   @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date  endDate){
+                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                   @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate  endDate,
+                                   @RequestParam String tag){
         if(principal!=null){
             String username=principal.getName();
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
             if(userSite!=null){
+                TagsEntity findTag = tagsRepository.findByTagName(tag);
                 PostsEntity post=new PostsEntity();
                 post.setSubject(subject.toLowerCase());
-
                 post.setBody(body);
                 post.setStartDate(startDate);
                 post.setEndDate(endDate);
                 post.setUser(userSite);
-                post.setCreatedAt(new Date());
+                post.setCreatedAt(LocalDate.now());
+                post.getTags().add(findTag);
+                findTag.getPosts().add(post);
                 postsRepo.save(post);
                 System.out.println(endDate);
                 return new RedirectView("profile/" + principal.getName());
@@ -80,7 +88,10 @@ public class PostController {
     }
 
     @PutMapping("/posts/{id}")
-    public RedirectView updatePost(@PathVariable long id, Principal p, @RequestParam("subject") String subject, @RequestParam("body") String body, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+    public RedirectView updatePost(@PathVariable long id, Principal p,
+                                   @RequestParam("subject") String subject,
+                                   @RequestParam("body") String body, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                   @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         PostsEntity post = postsRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
         post.setSubject(subject);
         post.setBody(body);

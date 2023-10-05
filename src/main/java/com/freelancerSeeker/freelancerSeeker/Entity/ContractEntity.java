@@ -22,9 +22,9 @@ public class ContractEntity {
     @Column(name = "subject",nullable = false)
     private String subject;
     @Column(name = "startDate",nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
     @Column(name = "endDate",nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
     @Column(name = "pricePerHour",nullable = false)
     private double pricePerHour;
     @Column(name = "body",nullable = false)

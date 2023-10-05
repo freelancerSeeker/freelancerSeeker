@@ -7,9 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,21 +24,21 @@ public class PostsEntity {
     @Column(name = "body", length = 5000, nullable = false)
     private String body;
     @Column(name = "createdAd")
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name = "startDate", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
     @Column(name = "endDate")
-    private Date endDate;
+    private LocalDate endDate;
     @ManyToOne
     private UserSiteEntity user;
-    @ManyToMany(mappedBy = "posts")
-    private Set<TagsEntity> tags;
+    @ManyToMany
+    @JoinTable(
+            name = "post_tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<TagsEntity> tags = new HashSet<>();
     @OneToMany(mappedBy = "posts",cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
-
-    public void addTag(TagsEntity tag){
-        this.tags.add(tag);
-    }
 
 
 }
