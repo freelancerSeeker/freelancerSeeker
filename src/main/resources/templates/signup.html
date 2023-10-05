@@ -62,7 +62,9 @@
                 <p id="passwordError" class="error"></p>
                 <label>
                     <span>Country</span>
-                    <input type="text" name="country">
+                    <select class="w-100" name="country">
+                        <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
+                    </select>
                 </label>
                 <label>
                     <span>Description</span>

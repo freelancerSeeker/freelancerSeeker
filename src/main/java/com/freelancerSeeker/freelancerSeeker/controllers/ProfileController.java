@@ -1,10 +1,12 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.SkillsEntity;
+import com.freelancerSeeker.freelancerSeeker.Entity.TagsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.SkillsRepository;
+import com.freelancerSeeker.freelancerSeeker.Repository.TagsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,20 +21,27 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProfileController {
     @Autowired
     UserSiteRepository userSiteRepo;
+    @Autowired
+    TagsRepository tagsRepository;
 
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
         UserSiteEntity userSite = userSiteRepo.findByUsername(username);
         if (userSite != null && p != null) {
-            String logedUser = p.getName();
+            UserSiteEntity loggedUser = userSiteRepo.findByUsername(p.getName());
+            List<TagsEntity> tags = tagsRepository.findAll();
+            List<String> following = loggedUser.getFollowing().stream().map(UserSiteEntity::getUsername).collect(Collectors.toList());
             m.addAttribute("user", userSite);
             m.addAttribute("post", userSite.getPosts());
-            m.addAttribute("loggedUsername", logedUser);
+            m.addAttribute("tags", tags);
+            m.addAttribute("loggedUsername", loggedUser.getUsername());
+            m.addAttribute("following",following);
             return "profile";
 
         }
@@ -53,8 +62,6 @@ public class ProfileController {
         userSiteRepo.save(userSite);
         return new RedirectView("/freelancer/" + id);
     }
-
-
     @PutMapping("/users/{id}")
 
     public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String description, @RequestParam String email, @RequestParam String country) {
@@ -69,8 +76,6 @@ public class ProfileController {
         userSiteRepo.save(existingUser);
         return new RedirectView("/profile/" + existingUser.getUsername());
     }
-
-
     @PostMapping("/user/skill/{id}")
     public RedirectView updateFreeLancerSkill(@PathVariable Long id, @RequestParam String skillName) {
         UserSiteEntity user = userSiteRepo.findById(id).orElseThrow();
@@ -82,13 +87,3 @@ public class ProfileController {
         return new RedirectView("/profile/" + user.getUsername());
     }
 }
-
-
-
-
-
-
-
-
-
-
