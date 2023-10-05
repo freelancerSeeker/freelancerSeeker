@@ -33,6 +33,7 @@ public class PostController {
 
     @PostMapping("/create-post")
 
+
     public RedirectView createPost(Principal principal, @RequestParam ("subject")String subject,
                                    @RequestParam ("body") String body,
                                    @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -44,10 +45,22 @@ public class PostController {
             if(userSite!=null){
                 TagsEntity findTag = tagsRepository.findByTagName(tag);
                 PostsEntity post=new PostsEntity();
+
                 post.setSubject(subject.toLowerCase());
                 post.setBody(body);
-                post.setStartDate(startDate);
-                post.setEndDate(endDate);
+                if (startDate.isAfter(LocalDate.now())) {
+                    post.setStartDate(startDate);
+                } else {
+                    return new RedirectView("profile/" + principal.getName() + "?Error=Date error");
+                }
+                if (endDate != null) {
+                    if (startDate.isBefore(endDate)) {
+                        post.setEndDate(endDate);
+
+                    } else {
+                        return new RedirectView("profile/" + principal.getName() + "?Error=Date error");
+                    }
+                }
                 post.setUser(userSite);
                 post.setCreatedAt(LocalDate.now());
                 post.getTags().add(findTag);
@@ -64,15 +77,15 @@ public class PostController {
 
     @GetMapping("/Posts/{postId}")
 
-    public String getPostById(Principal principal,@PathVariable Long postId,Model model){
-        if(principal!=null){
-            String username=principal.getName();
-            UserSiteEntity userSite=userSiteRepo.findByUsername(username);
-            if(userSite!=null){
-                PostsEntity post=postsRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException());
-                model.addAttribute("postDetails",post);
-                model.addAttribute("postDetailsWithComments",post.getComments());
-                model.addAttribute("logedinUser",userSite);
+    public String getPostById(Principal principal, @PathVariable Long postId, Model model) {
+        if (principal != null) {
+            String username = principal.getName();
+            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+            if (userSite != null) {
+                PostsEntity post = postsRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException());
+                model.addAttribute("postDetails", post);
+                model.addAttribute("postDetailsWithComments", post.getComments());
+                model.addAttribute("logedinUser", userSite);
                 return "post";
             }
         }

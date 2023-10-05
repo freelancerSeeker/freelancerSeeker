@@ -75,11 +75,23 @@
 <!-- top-area Start -->
 <section th:replace="/fragments/header-nav :: header"></section>
 <!-- top-area End -->
+<form action="/filter" method="POST">
+<div class="col-md-2 col-md-12" style="margin-left:160px;">
+    <div class="form-group">
+        <input type="hidden" name="subject" th:value="${subject}" />
+        <label for="startDate">Filter by start Date:</label>
+        <input type="date" id="startDate" name="startDate" class="form-control" required/>
+    </div>
+    <button type="submit" data-id="5" class="btn btn-custom" data-toggle="modal" data-target="#skillModal">Filter</button>
+</div>
+</form>
 <section id="explore" class="explore">
     <div class="container">
         <div class="section-header">
             <h2>Search results for "<span th:text="${subject}"></span>"</h2>
+
         </div><!--/.section-header-->
+
         <div class="explore-content">
             <div class="row">
                 <div th:each="post:${posts}" class=" col-md-4 col-sm-6">
@@ -89,6 +101,7 @@
                         <h3 style="margin-top:10px;"
                             th:text="' In ' + ${post.createdAt}"></h3>
                         <p class="badge badge-custom" th:each="tag : ${post.tags}" th:text="'#' + ${tag.tagName}"></p>
+
                         <p th:text="${post.body}" style="margin-top:20px"></p>
                         <p th:text="'StartDate: ' + ${post.startDate}"></p>
                     </div>

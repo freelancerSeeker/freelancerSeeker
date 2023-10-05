@@ -265,7 +265,6 @@
                         <p th:text="${posts.body}" style="margin-top:20px"></p>
                         <p th:text="${posts.createdAt}"></p>
                         <p class="badge badge-custom" th:each="tag :${posts.tags}" th:text="${'#' + tag.tagName}"></p>
-
                         <form th:action="'/posts/' + ${posts.id}" th:method="PUT" th:if="${username == loggedUsername}">
                             <div class="form-group">
                                 <label for="subject">Subject:</label>

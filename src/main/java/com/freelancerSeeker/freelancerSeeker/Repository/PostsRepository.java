@@ -5,8 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import javax.security.auth.Subject;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
@@ -14,8 +18,8 @@ public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
 
     List<PostsEntity> findAllByOrderBySubjectDesc();
     List<PostsEntity> findBySubject(String subject);
-    List<PostsEntity> findBySubjectOrderBySubjectDesc(String subject);
-    List<PostsEntity> findBySubjectOrderByCreatedAtDesc(String subject);
+
+
     List<PostsEntity> findBySubjectContainingOrderByCreatedAtDesc(String keyword);
 
 
@@ -23,6 +27,21 @@ public interface PostsRepository extends JpaRepository<PostsEntity,Long> {
 
     Page<PostsEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+
+
+
+
+
+
+
+    List<PostsEntity> findByCreatedAt(LocalDate createdAt);
+
+
+    Page<PostsEntity> findBySubjectContainingAndStartDate(String subject, LocalDate startDate, Pageable pageable);
+
+
     Page<PostsEntity> findByTags_TagNameContaining(String tag, Pageable pageable);
+
 }
+
 
