@@ -205,7 +205,7 @@
 
                         <div class="single-explore-txt bg-theme-1">
                             <h2 th:text="${post.user.username}"></h2>
-                            <p th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd  HH:MM')}"> Date </p>
+                            <p th:text="${post.createdAt}"> Date </p>
                             <p th:text="${post.user.roles}">Role</p>
                             <div class="explore-person">
                                 <div class="row">

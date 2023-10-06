@@ -1,10 +1,8 @@
 package com.freelancerSeeker.freelancerSeeker.Entity;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 
 @NoArgsConstructor
@@ -15,16 +13,19 @@ import javax.persistence.*;
 @Table
 public class ReviewEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "Description" ,nullable = false)
+    @Column(name = "Description", nullable = false)
     private String description;
-    @Column(name = "Stars",nullable = false)
+    @Column(name = "Stars", nullable = false)
     private int numberOfStars;
+    @ManyToOne
+    private UserSiteEntity freelancer;
     @ManyToOne
     private UserSiteEntity user;
 
-
 }
+
+
+

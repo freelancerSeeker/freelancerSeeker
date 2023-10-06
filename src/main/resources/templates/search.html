@@ -89,11 +89,11 @@
                         <h1 th:text="${post.user.username}"></h1>
 
                         <h2 style="margin-top:10px;" th:text="${post.subject}"></h2>
-                        <h3 style="margin-top:10px;" th:text="'At ' + ${#dates.format(post.createdAt, 'hh:MM')} + ' In ' + ${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></h3>
+                        <h3 style="margin-top:10px;" th:text=" ' In ' + ${post.createdAt}"></h3>
 
 
                         <p th:text="${post.body}" style="margin-top:20px"></p>
-                        <p th:text="'StartDate: ' + ${#dates.format(post.startDate, 'yyyy-MM-dd')}"></p>
+                        <p th:text="'StartDate: ' + ${post.startDate}"></p>
                     </div>
                 </div>
             </div>

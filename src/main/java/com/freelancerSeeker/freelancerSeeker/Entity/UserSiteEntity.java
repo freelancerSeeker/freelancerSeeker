@@ -46,10 +46,12 @@ public class UserSiteEntity implements UserDetails {
     private Role roles;
     @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
     private List<SkillsEntity> skillsList;
-
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL)
     private List<ReviewEntity> reviews;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<ReviewEntity> review;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -180,7 +180,7 @@
                         <h2 th:text="${posts.subject}"></h2>
 
                         <p th:text="${posts.body}" style="margin-top:20px"></p>
-                        <p th:text="${#dates.format(posts.createdAt, 'yyyy-MM-dd')}"></p>
+                        <p th:text="${posts.createdAt}"></p>
 
                         <form th:action="'/posts/' + ${posts.id}" th:method="PUT">
                             <div class="form-group">
@@ -193,11 +193,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="startDate">Start Date:</label>
-                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(posts.startDate, 'yyyy-MM-dd')}" >
+                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${posts.startDate}" >
                             </div>
                             <div class="form-group">
                                 <label for="endDate">End Date:</label>
-                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(posts.endDate, 'yyyy-MM-dd')}" >
+                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${posts.endDate}" >
                             </div>
                             <button type="submit" class="update-btn welcome-hero-btn how-work-btn ">Update</button>
                         </form>

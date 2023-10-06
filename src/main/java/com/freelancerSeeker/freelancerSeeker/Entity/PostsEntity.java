@@ -26,11 +26,11 @@ public class PostsEntity {
     @Column(name = "body", length = 5000, nullable = false)
     private String body;
     @Column(name = "createdAd")
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name = "startDate", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
     @Column(name = "endDate")
-    private Date endDate;
+    private LocalDate endDate;
     @ManyToOne
     private UserSiteEntity user;
     @ManyToMany(mappedBy = "posts")
