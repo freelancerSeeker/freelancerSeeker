@@ -6,23 +6,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-@Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Setter
+@AllArgsConstructor
 @Getter
-public class TagsEntity {
+@Setter
+@Entity
+@Table
+public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "body", length = 5000, nullable = false)
+    private String body;
 
-    @Column(name = "tag_name")
-    private String tagName;
+    @ManyToOne
+    private UserSiteEntity user;
+    @ManyToOne
+    private PostsEntity posts;
 
-    @ManyToMany(mappedBy = "tags")
-    private Set<PostsEntity> posts = new HashSet<>();
+
 }

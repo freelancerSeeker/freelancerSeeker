@@ -7,16 +7,6 @@
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
-    <style>
-        /* Hide the sign-up forms by default */
-        .signup-form {
-            display: none;
-        }
-        .error {
-            color: red;
-        }
-
-    </style>
 </head>
 <body>
 <br>
@@ -39,6 +29,7 @@
             </label>
             <p class="forgot-pass">Forgot password?</p>
             <button type="submit" class="submit">Sign In</button>
+            <button type="button" class="submit"><a class="text-decoration-none text-light" href="/">Home</a></button>
         </form>
     </div>
     <div class="sub-cont">
@@ -71,11 +62,13 @@
                 <p id="passwordError" class="error"></p>
                 <label>
                     <span>Country</span>
-                    <input type="text" name="country">
+                    <select class="w-100" name="country">
+                        <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
+                    </select>
                 </label>
                 <label>
-                <span>Description</span>
-                <input type="text" name="description">
+                    <span>Description</span>
+                    <input type="text" name="description">
                 </label>
                 <label>
                     <span>Email</span>
@@ -90,11 +83,16 @@
                     <span>Last Name</span>
                     <input type="text" class="form-style" name="lastname">
                 </label>
-                <label>
-                    <label>Sign up as</label>
-                    <input type="radio" name="role" value="USER" >
-                    <input type="radio" name="role" value="FREELANCER" >
-                </label>
+                <div class="flex-row d-flex align-items-baseline">
+                    <div class="form-group">
+                        <label for="user">User</label>
+                        <input type="radio" name="role" value="USER" id="user">
+                    </div>
+                    <div class="form-group">
+                        <label for="freelancer">Freelancer</label>
+                        <input type="radio" name="role" value="FREELANCER" id="freelancer">
+                    </div>
+                </div>
                 <button type="submit" class="submit">Sign Up</button>
             </form>
         </div>
@@ -144,10 +142,6 @@
 
     return isValid;
 }
-
-
-
-
 </script>
 
 </body>

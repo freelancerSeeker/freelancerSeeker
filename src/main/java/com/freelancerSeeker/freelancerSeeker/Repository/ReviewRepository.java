@@ -11,4 +11,5 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity,Long>{
     List <ReviewEntity> findByFreelancer(String username);
 
     List<ReviewEntity> findByFreelancerUsername(String toLowerCase);
+
 }

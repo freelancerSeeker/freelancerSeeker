@@ -16,6 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -66,7 +67,7 @@ public class ContractController {
         return "contract.html";
     }
 
-    @DeleteMapping("/contracts/{contractId}")
+    @DeleteMapping("/contracts/delete/{contractId}")
     public RedirectView deleteContract(@PathVariable Long contractId){
         contractsRepo.deleteById(contractId);
         return new RedirectView("/profile");

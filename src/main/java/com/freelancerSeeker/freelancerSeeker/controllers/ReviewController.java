@@ -8,11 +8,12 @@ import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
 import java.security.Principal;
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
 
 @Controller
@@ -22,6 +23,7 @@ public class ReviewController {
     UserSiteRepository userSiteRepo;
     @Autowired
     ReviewRepository  reviewRepository ;
+
 
     @GetMapping("/reviews")
     public String showFreelancerReviews(Model model,Principal principal) {
@@ -80,3 +82,4 @@ public class ReviewController {
         return new RedirectView("/reviews");
     }
     }
+

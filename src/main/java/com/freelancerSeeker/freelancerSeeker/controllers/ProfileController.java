@@ -1,9 +1,12 @@
 package com.freelancerSeeker.freelancerSeeker.controllers;
 
 import com.freelancerSeeker.freelancerSeeker.Entity.SkillsEntity;
+import com.freelancerSeeker.freelancerSeeker.Entity.TagsEntity;
 import com.freelancerSeeker.freelancerSeeker.Entity.UserSiteEntity;
+import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import com.freelancerSeeker.freelancerSeeker.Repository.PostsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.SkillsRepository;
+import com.freelancerSeeker.freelancerSeeker.Repository.TagsRepository;
 import com.freelancerSeeker.freelancerSeeker.Repository.UserSiteRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -18,28 +21,39 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProfileController {
     @Autowired
     UserSiteRepository userSiteRepo;
+    @Autowired
+    TagsRepository tagsRepository;
 
     @GetMapping("/profile/{username}")
     public String getUserInfo(Model m, Principal p, @PathVariable String username) {
-        if (p != null) {
-            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+        UserSiteEntity userSite = userSiteRepo.findByUsername(username);
+        if (userSite != null && p != null) {
+            UserSiteEntity loggedUser = userSiteRepo.findByUsername(p.getName());
+            List<TagsEntity> tags = tagsRepository.findAll();
+            List<String> following = loggedUser.getFollowing().stream().map(UserSiteEntity::getUsername).collect(Collectors.toList());
             m.addAttribute("user", userSite);
             m.addAttribute("post", userSite.getPosts());
+            m.addAttribute("tags", tags);
+            m.addAttribute("loggedUsername", loggedUser.getUsername());
+            m.addAttribute("following",following);
             return "profile";
 
         }
-        return "home";
+        return "redirect:/";
     }
 
     @PutMapping("/freelancer/{id}")
 
-    public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String description, @RequestParam String phoneNumber,@RequestParam String country,@RequestParam List<String> skills) {
-        UserSiteEntity userSite= userSiteRepo.findById(id).orElseThrow();
+    public RedirectView updateFreeLancerInfo(@PathVariable Long id, @RequestParam String username, @RequestParam String email, @RequestParam String firstName, @RequestParam String lastName,
+                                             @RequestParam String description, @RequestParam String phoneNumber,
+                                             @RequestParam String country, @RequestParam List<String> skills) {
+        UserSiteEntity userSite = userSiteRepo.findById(id).orElseThrow();
 
         userSite.setUsername(username);
         userSite.setCountry(country);
@@ -50,20 +64,11 @@ public class ProfileController {
         userSiteRepo.save(userSite);
         return new RedirectView("/freelancer/" + id);
     }
-
-
-
-    @GetMapping("/api/skills")
-    @ResponseBody
-    public List<String> getSkillsByKeyword(@RequestParam String keyword) {
-
-        List<String> skills = SkillsRepository.getSkillsByKeyword(keyword);
-        return skills;
-    }
-
     @PutMapping("/users/{id}")
 
-    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String description, @RequestParam String email, @RequestParam String country) {
+    public RedirectView updateNormalUserInfo(@PathVariable Long id, @RequestParam String firstname,
+                                             @RequestParam String lastname, @RequestParam String description,
+                                             @RequestParam String email, @RequestParam String country) {
 
         UserSiteEntity existingUser = userSiteRepo.findById(id).orElseThrow();
 
@@ -74,16 +79,15 @@ public class ProfileController {
         existingUser.setLastname(lastname);
         userSiteRepo.save(existingUser);
         return new RedirectView("/profile/" + existingUser.getUsername());
-    }}
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    @PostMapping("/user/skill/{id}")
+    public RedirectView updateFreeLancerSkill(@PathVariable Long id, @RequestParam String skillName) {
+        UserSiteEntity user = userSiteRepo.findById(id).orElseThrow();
+        SkillsEntity skill = new SkillsEntity();
+        skill.setSkill(skillName);
+        skill.setUsersite(user);
+        user.getSkillsList().add(skill);
+        userSiteRepo.save(user);
+        return new RedirectView("/profile/" + user.getUsername());
+    }
+}

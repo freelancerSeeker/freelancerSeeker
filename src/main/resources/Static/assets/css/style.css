@@ -932,6 +932,7 @@ display:flex;
 justify-content:space-evenly;}
 
 .heading {
+margin:10px 0px;
 padding:10px 0px;
 color: #FF545A;
 }
@@ -969,3 +970,189 @@ box-shadow: 0 0px 5px rgba(71,71,71,.2);
     .pagination a:hover {
         background-color: #f5f5f5;
     }
+    .p-5{
+    padding:15px;}
+    .list-group:hover{
+    color:#FF545A;
+    border-radius: 5px;
+    box-shadow: 0 0px 5px rgba(71,71,71,.2);
+    }
+.my-scrollable-element {
+  margin-bottom:20px;
+  overflow-y: auto;
+  height: 300px;
+}
+
+.my-scrollable-element::-webkit-scrollbar {
+  width: 12px;
+}
+
+.my-scrollable-element::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.my-scrollable-element::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+.my-scrollable-element::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.my-scrollable-element::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+/* Override Bootstrap modal styles */
+#skillModal .modal-dialog {
+  max-width: 500px; /* Adjust the maximum width as needed */
+}
+
+#skillModal .modal-content {
+  border: none; /* Remove border */
+}
+
+#skillModal .modal-body {
+  padding: 20px;
+}
+
+#skillModal .modal-title {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+#skillModal #skillSearchInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#skillModal button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+#skillModal #skillResults {
+  margin-top: 20px;
+}
+
+#skillModal .close {
+  padding: 10px;
+}
+
+/* Customize scrollbar for the skillResults div */
+#skillModal #skillResults {
+  max-height: 300px; /* Adjust the max height as needed */
+  overflow-y: auto;
+}
+
+#skillModal #skillResults::-webkit-scrollbar {
+  width: 10px;
+}
+
+#skillModal #skillResults::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+#skillModal #skillResults::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+#skillModal #skillResults::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+.kebab-menu{
+    display: flex;
+    flex-direction: row-reverse;
+    }
+.kebab-icon {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: #000;
+    border-radius: 50%;
+    margin: 3px 0;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 80px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.show {
+    display: block;
+}
+.badge-custom{
+padding:10px;
+color:white;
+background-color:#FF545A;
+}
+.single-how-works:hover p.badge-custom{
+background-color:white;
+color: #FF545A;
+}
+#explore-search-bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+#explore-search-button {
+    padding: 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#explore-search-button i {
+    vertical-align: middle;
+}
+
+#explore-search-button:hover {
+    background-color: #45a049;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    font-size: 16px;
+}
+a.btn-custom:hover{
+font-size:14px;
+text-capitalize:none;
+padding: 6px 12px;}
