@@ -18,7 +18,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 public class ContractController {
@@ -32,8 +32,8 @@ public class ContractController {
 
     @PostMapping("/create-contract")
     public RedirectView createContract(Principal principal, @RequestParam ("subject")String subject,
-                                       @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                                       @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
+                                       @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                       @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
                                        @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body,
                                        @RequestParam ("approvedBy")String approvedBy){
         if (principal!=null){
@@ -47,7 +47,7 @@ public class ContractController {
                 contract.setPricePerHour(pricePerHour);
                 contract.setBody(body);
                 contract.setUser(userSite);
-                contract.setCreatedAt(new Date());
+                contract.setCreatedAt(LocalDate.now());
                 contract.setApprovedBy(userSiteRepo.findByUsername(approvedBy));
                 contractsRepo.save(contract);
                 return new RedirectView("/contracts");
@@ -118,8 +118,8 @@ public class ContractController {
 
     @PutMapping("/contracts/update/{contractId}")
     public RedirectView updatePost(Principal principal,@PathVariable Long contractId, @RequestParam ("subject")String subject,
-                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                                   @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")Date endDate,
+                                   @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                   @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
                                    @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
         if(principal!=null){
             String username=principal.getName();

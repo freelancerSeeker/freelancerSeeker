@@ -63,6 +63,23 @@ public class CommentController {
         return new RedirectView("/");
     }
 
+    @PutMapping("/comment/update/{commentID}")
+    public RedirectView updateComment(@PathVariable Long commentID,Principal principal,@RequestParam("body") String body){
+        if(principal!= null){
+            String username=principal.getName();
+            UserSiteEntity userSite=userSiteRepository.findByUsername(username);
+            if(userSite!=null){
+                CommentEntity commentEntity=commentRepository.findById(commentID).orElseThrow(()->new ResourceNotFoundException());
+                    if(userSite.getId()==commentEntity.getUser().getId()){
+                        commentEntity.setBody(body);
+                        commentRepository.save(commentEntity);
+                        return new RedirectView("/Posts/" + commentEntity.getPosts().getId());
+                    }
+            }
+        }
+        return new RedirectView();
+    }
+
 
 
 

@@ -180,9 +180,9 @@
                             <h2 th:text="'contract Subject: ' + ${contract.subject}" style="font-size: 20px; margin-top: 10px;"></h2>
                             <p th:text="'contract Body: ' + ${contract.body}" style="margin-top: 10px;"></p>
                             <p th:text="'price Per Hour: ' + ${contract.pricePerHour}" style="margin-top: 10px;"></p>
-                            <p th:text="'contract Created Date: ' + ${#dates.format(contract.createdAt, 'yyyy-MM-dd')}" style="margin-top: 10px;"></p>
-                            <p th:text="'contract Start Date: ' + ${#dates.format(contract.startDate, 'yyyy-MM-dd')}" style="margin-top: 10px;"></p>
-                            <p th:text="'contract End Date: ' + ${#dates.format(contract.endDate, 'yyyy-MM-dd')}" style="margin-top: 10px;"></p>
+                            <p th:text="'contract Created Date: ' + ${contract.createdAt}" style="margin-top: 10px;"></p>
+                            <p th:text="'contract Start Date: ' + ${contract.startDate}" style="margin-top: 10px;"></p>
+                            <p th:text="'contract End Date: ' + ${contract.endDate}" style="margin-top: 10px;"></p>
                             <p th:text="'Contract Status: ' + (${contract.approved} ? 'APPROVED' : 'PENDING')" style="margin-top: 10px;"></p>
 
                             <form th:action="@{'/approve-contract/' + ${contract.id}}" method="post" th:if="${user.roles.name == 'USER' and !contract.approved}">
@@ -211,12 +211,12 @@
 
                                         <div style="margin-bottom: 10px;">
                                             <label for="startDate" style="font-weight: bold;">Start Date:</label>
-                                            <input type="date" id="startDate" name="startDate" th:value="${#dates.format(contract.startDate, 'yyyy-MM-dd')}" style="width: 100%; padding: 5px;" required />
+                                            <input type="date" id="startDate" name="startDate" th:value="${contract.startDate}" style="width: 100%; padding: 5px;" required />
                                         </div>
 
                                         <div style="margin-bottom: 10px;">
                                             <label for="endDate" style="font-weight: bold;">End Date:</label>
-                                            <input type="date" id="endDate" name="endDate" th:value="${#dates.format(contract.endDate, 'yyyy-MM-dd')}" style="width: 100%; padding: 5px;" required />
+                                            <input type="date" id="endDate" name="endDate" th:value="${contract.endDate}" style="width: 100%; padding: 5px;" required />
                                         </div>
 
                                         <div style="margin-bottom: 10px;">
