@@ -199,7 +199,9 @@
                     <div class="single-explore-item">
 
                         <div class="single-explore-txt bg-theme-1">
-                            <h2 th:text="${post.user.username}"></h2>
+                            <h2>
+                                <a th:href="@{'/profile/' + ${post.user.username}}" th:text="${post.user.username}"></a>
+                            </h2>
                             <p th:text="${post.createdAt}"> Date </p>
                             <p th:text="${post.user.roles}">Role</p>
                             <p th:each="tag : ${post.tags}" class="badge badge-custom" th:text="'#' + ${tag.tagName}">Tag</p>
