@@ -126,9 +126,9 @@
                             <h2 th:text="'Post Subject: ' + ${postDetails.subject}" style="font-size: 20px; margin-top: 10px;"></h2>
                             <p th:each="tag : ${postDetails.tags}" class="badge badge-custom" th:text="'#' + ${tag.tagName}" ></p>
                             <p th:text="'Post Body: ' + ${postDetails.body}" style="margin-top: 10px;"></p>
-                            <p th:text="'Post Created Date: ' + ${#dates.format(postDetails.createdAt, 'yyyy-MM-dd')}" style="margin-top: 10px;"></p>
-                            <p th:text="'Post Start Date: ' + ${#dates.format(postDetails.startDate, 'yyyy-MM-dd')}" style="margin-top: 10px;"></p>
-                            <p th:text="'Post End Date: ' + ${#dates.format(postDetails.endDate, 'yyyy-MM-dd')}" style="margin-top: 10px;"></p>
+                            <p th:text="'Post Created Date: ' + ${postDetails.createdAt}" style="margin-top: 10px;"></p>
+                            <p th:text="'Post Start Date: ' + ${postDetails.startDate}" style="margin-top: 10px;"></p>
+                            <p th:text="'Post End Date: ' + ${postDetails.endDate}" style="margin-top: 10px;"></p>
                         </div>
                     </div>
                 </div>

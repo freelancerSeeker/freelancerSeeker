@@ -98,6 +98,7 @@
                     <div class="single-how-works">
                         <h1 th:text="${post.user.username}"></h1>
                         <h2 style="margin-top:10px;" th:text="${post.subject}"></h2>
+
                         <h3 style="margin-top:10px;"
                             th:text="' In ' + ${post.createdAt}"></h3>
                         <p class="badge badge-custom" th:each="tag : ${post.tags}" th:text="'#' + ${tag.tagName}"></p>

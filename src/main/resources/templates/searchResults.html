@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- meta data -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!--font-family-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- title of site -->
+    <title>Reviews</title>
+
+    <!-- For favicon png -->
+    <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png"/>
+
+    <!--font-awesome.min.css-->
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+    <!--linear icon css-->
+    <link rel="stylesheet" href="assets/css/linearicons.css">
+
+    <!--animate.css-->
+    <link rel="stylesheet" href="assets/css/animate.css">
+
+    <!--flaticon.css-->
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+
+    <!--slick.css-->
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/slick-theme.css">
+
+    <!--bootstrap.min.css-->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- bootsnav -->
+    <link rel="stylesheet" href="assets/css/bootsnav.css" >
+
+    <!--style.css-->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!--responsive.css-->
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<section th:replace="/fragments/header-nav :: header"></section>
+<section id="reviews" class="reviews">
+    <div class="section-header">
+
+        <h2 th:text="'Search Results for ' + ${freelancerName}"></h2>
+
+
+    </div>
+
+
+
+
+    <!-- Display Results -->
+    <div class="container">
+
+        <div class="reviews-content">
+            <div class="testimonial-carousel">
+                <!-- Loop through search results and display as cards -->
+                <div class="single-testimonial-box" th:each="result : ${resultReviews}">
+                    <!-- Check if the review matches the selected freelancer's name -->
+                    <div class="testimonial-description" th:if="${result.freelancer.username == freelancerName}">
+                        <div class="testimonial-info">
+
+                            <div class="testimonial-person">
+                                <h2 th:text="${result.freelancer.username}"></h2>
+                                <h4 th:text="${result.user.username}"></h4>
+                                <div class="testimonial-person-star">
+                                    <!-- Loop through and display star rating -->
+                                    <i class="fa fa-star" th:each="star,iterStat : ${#numbers.sequence(1, result.numberOfStars)}"></i>
+                                </div>
+                                <!-- Add other user-related information if needed -->
+                            </div><!--/.testimonial-person-->
+                        </div><!--/.testimonial-info-->
+                        <div class="testimonial-comment">
+                            <p th:text="${result.description}"></p>
+                        </div><!--/.testimonial-comment-->
+                    </div><!--/.testimonial-description-->
+                </div><!--/.single-testimonial-box-->
+            </div><!--/.testimonial-carousel-->
+        </div><!--/.reviews-content-->
+    </div><!--/.container-->
+
+
+
+
+
+
+
+
+
+
+    <script src="assets/js/jquery.js"></script>
+
+    <!--modernizr.min.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+    <!--bootstrap.min.js-->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- bootsnav js -->
+    <script src="assets/js/bootsnav.js"></script>
+
+    <!--feather.min.js-->
+    <script  src="assets/js/feather.min.js"></script>
+
+    <!-- counter js -->
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/waypoints.min.js"></script>
+
+    <!--slick.min.js-->
+    <script src="assets/js/slick.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+    <!--Custom JS-->
+    <script src="assets/js/custom.js"></script>
+</body>
+</html>
