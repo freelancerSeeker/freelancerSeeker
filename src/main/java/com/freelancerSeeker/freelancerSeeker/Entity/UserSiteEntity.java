@@ -42,28 +42,22 @@ public class UserSiteEntity implements UserDetails {
     private List<PostsEntity> posts;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<ContractEntity> contracts;
+    @OneToMany(mappedBy = "approvedBy",cascade = CascadeType.ALL)
+    private List<ContractEntity> contractsForApprove;
     @Enumerated(EnumType.ORDINAL)
     private Role roles;
     @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
     private List<SkillsEntity> skillsList;
-
-    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL)
-    private List<ReviewEntity> reviews;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<ReviewEntity> review;
-
-
-
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
-
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<ReviewEntity> reviews;
     @ManyToMany
     @JoinTable(name = "followers_table",
             joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "followerId")})
     private Set<UserSiteEntity> following = new HashSet<>();
     @ManyToMany(mappedBy = "following")
     private Set<UserSiteEntity> followers = new HashSet<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

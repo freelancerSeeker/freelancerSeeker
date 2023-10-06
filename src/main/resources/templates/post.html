@@ -98,8 +98,25 @@
 
                                 <form th:action="@{'/comment/delete/' + ${comment.id}}" method="post">
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="btn btn-custom" th:if="${comment.user.id == logedinUser.id}">Delete</button>
+                                    <div class="btn-group" th:if="${comment.user.id == logedinUser.id}">
+                                        <button type="submit" class="btn btn-custom">Delete</button>
+                                        <button type="button" class="btn btn-custom" th:onclick="'toggleEditForm(\'' + ${comment.id} + '\')'">Edit</button>
+                                    </div>
                                 </form>
+
+                                <div th:attr="id='editFormContainer_' + ${comment.id}" style="display: none;">
+                                    <form th:action="'/comment/update/' + ${comment.id}" th:method="post">
+                                        <input type="hidden" name="_method" value="put" />
+                                        <input type="hidden" th:name="comment.id" th:value="${comment.id}" />
+                                        <div class="form-group">
+                                            <label for="body">Body:</label>
+                                            <textarea class="form-control" id="body" name="body" required th:text="${comment.body}"></textarea>
+                                        </div>
+                                        <button type="submit" class="update-btn welcome-hero-btn how-work-btn">Update</button>
+                                    </form>
+                                </div>
+
+
                             </li>
 
                         </ul>
@@ -212,5 +229,15 @@
 
 <!--Custom JS-->
 <script th:src="@{/assets/js/custom.js}"></script>
+<script>
+    function toggleEditForm(commentId) {
+        var editFormContainer = document.getElementById('editFormContainer_' + commentId);
+        if (editFormContainer.style.display === 'none') {
+            editFormContainer.style.display = 'block';
+        } else {
+            editFormContainer.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>

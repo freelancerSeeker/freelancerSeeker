@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -30,8 +29,14 @@ public class ContractEntity {
     @Column(name = "body",nullable = false)
     private String body;
     private LocalDate createdAt;
+    @Column(name = "approved")
+    private boolean approved = false;
+
     @ManyToOne
     private UserSiteEntity user;
+    @ManyToOne
+    private UserSiteEntity approvedBy;
+
 
 
 
