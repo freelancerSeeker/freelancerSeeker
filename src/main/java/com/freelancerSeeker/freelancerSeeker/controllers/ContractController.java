@@ -36,6 +36,7 @@ public class ContractController {
                                        @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
                                        @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body,
                                        @RequestParam ("approvedBy")String approvedBy){
+
         if (principal!=null){
             String username=principal.getName();
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
@@ -117,7 +118,7 @@ public class ContractController {
     }
 
     @PutMapping("/contracts/update/{contractId}")
-    public RedirectView updatePost(Principal principal,@PathVariable Long contractId, @RequestParam ("subject")String subject,
+    public RedirectView updateContract(Principal principal,@PathVariable Long contractId, @RequestParam ("subject")String subject,
                                    @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                    @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
                                    @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
@@ -148,6 +149,7 @@ public class ContractController {
         model.addAttribute("contractDetails",contract);
         return "contract";
     }
+
 
 
 

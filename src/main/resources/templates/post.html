@@ -141,6 +141,7 @@
                             <h1 th:text="'Post By: ' + ${postDetails.user.username}" style="font-size: 24px; font-weight: bold;"></h1>
                             <p th:text="'Role: ' + ${postDetails.user.roles}" style="margin-top: 10px; font-style: italic; color: #666;"></p>
                             <h2 th:text="'Post Subject: ' + ${postDetails.subject}" style="font-size: 20px; margin-top: 10px;"></h2>
+                            <p th:each="tag : ${postDetails.tags}" class="badge badge-custom" th:text="'#' + ${tag.tagName}" ></p>
                             <p th:text="'Post Body: ' + ${postDetails.body}" style="margin-top: 10px;"></p>
                             <p th:text="'Post Created Date: ' + ${postDetails.createdAt}" style="margin-top: 10px;"></p>
                             <p th:text="'Post Start Date: ' + ${postDetails.startDate}" style="margin-top: 10px;"></p>
