@@ -111,10 +111,19 @@ public String getPostByCreatedAt(Model model,Principal principal,@PathVariable(v
         TagsEntity foundedTag = tagsRepository.findByTagNameContaining(tag);
         if (foundedTag != null) {
             Page<PostsEntity> postsPage = postsRepository.findByTags_TagNameContaining(tag, pageable);
-            searchModel.addAttribute("posts", postsPage);
-            searchModel.addAttribute("subject", tag);
-            searchModel.addAttribute("currentPage", page);
-            searchModel.addAttribute("totalPages", postsPage.getTotalPages());
+            if (postsPage.isEmpty())
+            {
+                searchModel.addAttribute("currentPage", 1);
+                searchModel.addAttribute("totalPages", 1);
+                searchModel.addAttribute("posts", postsPage);
+                searchModel.addAttribute("noResultsMessage", "No matching posts found.");
+            }
+            else {
+                searchModel.addAttribute("posts", postsPage);
+                searchModel.addAttribute("subject", tag);
+                searchModel.addAttribute("currentPage", page);
+                searchModel.addAttribute("totalPages", postsPage.getTotalPages());
+            }
             if (p != null) {
                 searchModel.addAttribute("username", p.getName());
             }

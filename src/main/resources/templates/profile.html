@@ -63,9 +63,10 @@
         </div><!--/.section-header-->
         <div class="works-content">
             <div class="row">
-                <div th:if="${user.roles.name == 'FREELANCER'}" class="col-md-2 col-md-12">
-                    <div class="container" style="width:auto;">
-                        <div class="alert alert-custom" th:if="${param.user}" th:text="${param.user}"></div>*
+                <div class="col-md-2 col-sm-12">
+                    <div th:if="${user.roles.name == 'FREELANCER'}" class="container" style="width:auto;">
+                        <div class="alert alert-custom" th:if="${param.user}" th:text="${param.user}"></div>
+                        *
                         <h4 class="heading">Skill List</h4>
                         <ul class="my-scrollable-element">
                             <li th:each="skill: ${user.skillsList}" class="list-group p-5"
@@ -82,11 +83,6 @@
                                 style="margin-top:12px;"
                                 th:text="'Add tag'">Add tag
                         </button>
-                        <a th:if="${username == loggedUsername}" class="btn btn-custom"
-                                style="margin-top:12px;"
-                                th:text="'Your Contracts'"
-                        th:href="@{/contracts}">Add tag
-                        </a>
                         <div class="modal fade" id="skillModal" tabindex="-1" role="dialog"
                              aria-labelledby="skillModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -126,6 +122,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="container">
+                        <a th:if="${username == loggedUsername}" class="btn btn-custom"
+                           style="margin-top:12px;"
+                           th:text="'Your Contracts'"
+                           th:href="@{/contracts}">Your contracts
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-12">
@@ -196,20 +199,31 @@
                     </div>
                 </div>
                 <div class="col-md-2 col-sm-12">
-                    <form th:if="!${username == loggedUsername} and !${following.contains(username)}" th:action="@{'/follow/' + ${username}}" method="post">
-                        <button  class="btn btn-custom"
+                    <form th:if="!${username == loggedUsername} and !${following.contains(username)}"
+                          th:action="@{'/follow/' + ${username}}" method="post">
+                        <button class="btn btn-custom"
                                 style="margin-top:12px;">
                             Follow
                         </button>
                     </form>
-                    <form th:if="!${username == loggedUsername} and ${following.contains(username)}" th:action="@{'/unfollow/' + ${username}}"
+                    <form th:if="!${username == loggedUsername} and ${following.contains(username)}"
+                          th:action="@{'/unfollow/' + ${username}}"
                           method="post">
                         <button
                                 class="btn btn-custom" style="margin-top:12px;">
                             Unfollow
                         </button>
                     </form>
-
+                    <div class="user-status">
+                        <div class="followers">
+                            <h4>Followers</h4>
+                            <p th:text="${#sets.size(user.followers)}"></p>
+                        </div>
+                        <div class="following">
+                            <h4>following</h4>
+                            <p th:text="${#sets.size(user.following)}"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -436,6 +450,7 @@ function toggleDropdown(icon) {
         var dropdownContent = icon.nextElementSibling;
         dropdownContent.classList.toggle("show");
     }
+
 
 
 
