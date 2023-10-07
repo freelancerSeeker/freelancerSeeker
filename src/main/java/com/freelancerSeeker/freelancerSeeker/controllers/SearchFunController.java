@@ -40,14 +40,20 @@ public class SearchFunController {
     public String getSearchPost(Model model,
                                 @PathVariable String subject,
                                 Principal principal,
-                                @RequestParam(name = "page", defaultValue = "1") int page)
-    {
+                                @RequestParam(name = "page", defaultValue = "1") int page) {
         Pageable pageable = calculatePostPerPage(page);
         Page<PostsEntity> postPage = postsRepository.findBySubjectContaining(subject, pageable);
         List<PostsEntity> post = postPage.getContent();
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", postPage.getTotalPages());
-        model.addAttribute("posts", post);
+        if (post.isEmpty()) {
+            model.addAttribute("currentPage", 1);
+            model.addAttribute("totalPages", 1);
+            model.addAttribute("posts", post);
+            model.addAttribute("noResultsMessage", "No matching posts found.");
+        } else {
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", postPage.getTotalPages());
+            model.addAttribute("posts", post);
+        }
         if (principal != null) {
             String username = principal.getName();
             model.addAttribute("username", username);
@@ -58,33 +64,28 @@ public class SearchFunController {
     }
 
     @GetMapping("/search/{subject}/filter")
-public String getPostByCreatedAt(Model model,Principal principal,@PathVariable(value = "subject") String subject,
-                                 @RequestParam (name = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                                 @RequestParam(name = "page", defaultValue = "1") int page)
-    {
-        int postPerpage=9;
-        Pageable pageable= PageRequest.of(page-1,postPerpage,Sort.by("startDate").descending());
-        Page <PostsEntity> postPage = postsRepository.findBySubjectContainingAndStartDate(subject,startDate,pageable);
+    public String getPostByCreatedAt(Model model, Principal principal, @PathVariable(value = "subject") String subject,
+                                     @RequestParam(name = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                     @RequestParam(name = "page", defaultValue = "1") int page) {
+        int postPerpage = 9;
+        Pageable pageable = PageRequest.of(page - 1, postPerpage, Sort.by("startDate").descending());
+        Page<PostsEntity> postPage = postsRepository.findBySubjectContainingAndStartDate(subject, startDate, pageable);
         List<PostsEntity> post = postPage.getContent();
-        if(post.isEmpty())
-        {
+        if (post.isEmpty()) {
             model.addAttribute("currentPage", 1);
             model.addAttribute("totalPages", 1);
             model.addAttribute("posts", post);
             model.addAttribute("noResultsMessage", "No matching posts found.");
-        }
-        else
-        {
+        } else {
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", postPage.getTotalPages());
-            model.addAttribute("posts",post);
+            model.addAttribute("posts", post);
         }
 
-        if(principal!=null)
-        {
+        if (principal != null) {
             String username = principal.getName();
 
-            model.addAttribute("username",username);
+            model.addAttribute("username", username);
 
             return "search";
         }
@@ -111,14 +112,12 @@ public String getPostByCreatedAt(Model model,Principal principal,@PathVariable(v
         TagsEntity foundedTag = tagsRepository.findByTagNameContaining(tag);
         if (foundedTag != null) {
             Page<PostsEntity> postsPage = postsRepository.findByTags_TagNameContaining(tag, pageable);
-            if (postsPage.isEmpty())
-            {
+            if (postsPage.isEmpty()) {
                 searchModel.addAttribute("currentPage", 1);
                 searchModel.addAttribute("totalPages", 1);
                 searchModel.addAttribute("posts", postsPage);
                 searchModel.addAttribute("noResultsMessage", "No matching posts found.");
-            }
-            else {
+            } else {
                 searchModel.addAttribute("posts", postsPage);
                 searchModel.addAttribute("subject", tag);
                 searchModel.addAttribute("currentPage", page);
@@ -138,29 +137,24 @@ public String getPostByCreatedAt(Model model,Principal principal,@PathVariable(v
     }
 
     @PostMapping("/filter")
-    public String getFilter(Model model,  @RequestParam( name = "subject" , required = false ,defaultValue = "") String subject,
+    public String getFilter(Model model, @RequestParam(name = "subject", required = false, defaultValue = "") String subject,
                             Principal principal,
-                            @RequestParam (value = "startDate") @DateTimeFormat(pattern ="yyyy-MM-dd")LocalDate  startDate)  {
+                            @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate) {
 
 
-
-
-        List<PostsEntity> post= postsRepository.findByCreatedAt(startDate);
-        System.out.println("post"+post);
-        model.addAttribute("posts",post);
+        List<PostsEntity> post = postsRepository.findByCreatedAt(startDate);
+        System.out.println("post" + post);
+        model.addAttribute("posts", post);
         model.addAttribute("subject", subject);
         model.addAttribute("formattedDate", startDate);
-        if(principal!=null)
-        {
+        if (principal != null) {
             String username = principal.getName();
-            model.addAttribute("username",username);
+            model.addAttribute("username", username);
         }
 
 
-
-        return "redirect:/search/"+subject+"/filter"+"?startDate=" + startDate;
+        return "redirect:/search/" + subject + "/filter" + "?startDate=" + startDate;
     }
-
 
 
 }

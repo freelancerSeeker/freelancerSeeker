@@ -33,13 +33,16 @@ public class ContractController {
     @PostMapping("/create-contract")
     public RedirectView createContract(Principal principal, @RequestParam ("subject")String subject,
                                        @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                                       @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
+                                       @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
                                        @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body,
-                                       @RequestParam ("approvedBy")String approvedBy){
+                                       @RequestParam (value="approvedBy")String approvedBy){
 
         if (principal!=null){
             String username=principal.getName();
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            if (!isDateValid(startDate,endDate)){
+                return new RedirectView("/contracts" + "?Error=date error");
+            }
             if (userSite!=null&&userSite.getRoles()== Role.FREELANCER){
                 ContractEntity contract=new ContractEntity();
                 contract.setSubject(subject);
@@ -77,10 +80,6 @@ public class ContractController {
         }
         return new RedirectView("/contracts");
     }
-
-
-
-
     @GetMapping("/contracts")
     public String getAllContract(Principal principal,Model model){
         if(principal!=null){
@@ -120,11 +119,14 @@ public class ContractController {
     @PutMapping("/contracts/update/{contractId}")
     public RedirectView updateContract(Principal principal,@PathVariable Long contractId, @RequestParam ("subject")String subject,
                                    @RequestParam ("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                                   @RequestParam (value = "endDate",required = true) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
+                                   @RequestParam (value = "endDate",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
                                    @RequestParam ("pricePerHour")double pricePerHour, @RequestParam ("body")String body){
         if(principal!=null){
             String username=principal.getName();
             UserSiteEntity userSite=userSiteRepo.findByUsername(username);
+            if (!isDateValid(startDate,endDate)){
+                return new RedirectView("/contracts" + "?Error=date error");
+            }
             if(userSite!=null&&userSite.getRoles()== Role.FREELANCER){
                 ContractEntity contract =contractsRepo.findById(contractId).orElseThrow(()->new ResourceNotFoundException());
                 if(!contract.isApproved()){
@@ -149,10 +151,10 @@ public class ContractController {
         model.addAttribute("contractDetails",contract);
         return "contract";
     }
-
-
-
-
-
-
+    private boolean isDateValid(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now())) {
+            return false;
+        }
+        return endDate != null && startDate.isBefore(endDate);
+    }
 }
