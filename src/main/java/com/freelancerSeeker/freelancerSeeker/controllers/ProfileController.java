@@ -13,6 +13,7 @@ import com.google.gson.JsonArray;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class ProfileController {
             List<TagsEntity> tags = tagsRepository.findAll();
             List<String> following = loggedUser.getFollowing().stream().map(UserSiteEntity::getUsername).collect(Collectors.toList());
             m.addAttribute("user", userSite);
+            m.addAttribute("username", loggedUser.getUsername());
             m.addAttribute("post", userSite.getPosts());
             m.addAttribute("tags", tags);
             m.addAttribute("loggedUsername", loggedUser.getUsername());

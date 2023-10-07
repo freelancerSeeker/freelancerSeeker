@@ -18,14 +18,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UserSiteDetailsService userSiteDetailsService;
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(userSiteDetailsService).passwordEncoder(passwordEncoder());
     }
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
@@ -37,7 +39,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/assets/**").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/js/**").permitAll()
-                .antMatchers("/","/home","/about", "/search","/search-post","/search/**/**","/login", "/signup","/reviews","/posts/**").permitAll()
+                .antMatchers("/",
+                        "/home",
+                        "/about",
+                        "/search",
+                        "/search-post",
+                        "/search/**",
+                        "/filter",
+                        "/login",
+                        "/signup",
+                        "/reviews",
+                        "/posts/**")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

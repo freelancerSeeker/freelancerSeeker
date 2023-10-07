@@ -131,7 +131,9 @@
                         <form action="/create-contract" method="POST" class="text-info" >
                             <div class="form-group ">
                                 <label for="approvedBy">Contract with:</label>
-                                <input type="text" placeholder="Contract with" name="approvedBy" id="approvedBy" class="form-control" required/>
+                                <select name="approvedBy" id="approvedBy">
+                                    <option th:each="followedUser : ${user.followers}" th:value="${followedUser.username}" th:text="${followedUser.username}"></option>
+                                </select>
                             </div>
                             <div class="form-group ">
                                 <label for="subject">Subject:</label>
