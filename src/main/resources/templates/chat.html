@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<h1>Chat with {{ receiver.username }}</h1>
+<div class="chat-container">
+    <ul class="message-list" id="message-list">
+
+    </ul>
+    <input type="text" class="message-input" id="message-input" placeholder="Type your message...">
+    <button class="send-button" th:onclick="'sendMessage(' + ${sender.id} + ',' + ${receiver.id} + ')'">Send</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+
+<script>
+var socket = new SockJS('/chat');
+var stompClient = Stomp.over(socket);
+
+var isConnected = false; // Flag to track connection status
+
+stompClient.connect({}, function() {
+    isConnected = true; // Set the flag to true when connected
+    console.log("connected");
+
+    stompClient.subscribe('/user/topic/chat', function(message) {
+        var chatMessage = JSON.parse(message.body);
+        displayMessage(chatMessage);
+    });
+});
+
+function sendMessage(sender, receiver) {
+    if (isConnected) {
+        var messageInput = document.getElementById('message-input');
+        var message = messageInput.value;
+
+        // Send the message to the server
+        var messageDto = {
+            sender: sender,
+            receiver: receiver,
+            message: message
+        };
+        stompClient.send("/app/chat/send", {}, JSON.stringify(messageDto));
+
+        messageInput.value = '';
+    } else {
+        console.log("WebSocket connection is not established.");
+    }
+}
+
+function displayMessage(message) {
+    var messageList = document.getElementById('message-list');
+    var listItem = document.createElement('li');
+    listItem.innerText = message.sender.username + ': ' + message.message;
+    messageList.appendChild(listItem);
+}
+</script>
+</body>
+</html>
