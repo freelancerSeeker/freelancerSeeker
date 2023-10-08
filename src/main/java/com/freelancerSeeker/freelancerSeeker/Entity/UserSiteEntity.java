@@ -23,34 +23,34 @@ public class UserSiteEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private  Long id;
-    @Column(name = "username",unique = true,nullable = false)
+    private Long id;
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "description")
     private String description;
-    @Column(name = "email",unique = true,nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "firstName",nullable = false)
+    @Column(name = "firstName", nullable = false)
     private String firstname;
-    @Column(name = "lastName",nullable = false)
+    @Column(name = "lastName", nullable = false)
     private String lastname;
     @Column(name = "country")
     private String country;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostsEntity> posts;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ContractEntity> contracts;
-    @OneToMany(mappedBy = "approvedBy",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL)
     private List<ContractEntity> contractsForApprove;
     @Enumerated(EnumType.ORDINAL)
     private Role roles;
-    @OneToMany(mappedBy = "usersite",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usersite", cascade = CascadeType.ALL)
     private List<SkillsEntity> skillsList;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReviewEntity> reviews;
     @ManyToMany
     @JoinTable(name = "followers_table",
@@ -58,6 +58,12 @@ public class UserSiteEntity implements UserDetails {
     private Set<UserSiteEntity> following = new HashSet<>();
     @ManyToMany(mappedBy = "following")
     private Set<UserSiteEntity> followers = new HashSet<>();
+
+    @OneToMany(mappedBy = "sender")
+    private List<MessageEntity> sentMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<MessageEntity> receivedMessages = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -87,7 +93,16 @@ public class UserSiteEntity implements UserDetails {
     public void addFollowing(UserSiteEntity user) {
         this.following.add(user);
     }
+
     public void addFollower(UserSiteEntity user) {
         this.followers.add(user);
+    }
+
+    public void addSentMessage(MessageEntity message) {
+        sentMessages.add(message);
+    }
+
+    public void addReceivedMessage(MessageEntity message) {
+        receivedMessages.add(message);
     }
 }

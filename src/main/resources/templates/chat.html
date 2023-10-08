@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- User List with Message Button -->
+<ul>
+    <li>
+        User A
+        <button onclick="openMessageModal(1)">Message</button>
+    </li>
+    <li>
+        User B
+        <button onclick="openMessageModal(2)">Message</button>
+    </li>
+    <!-- Add more users as needed -->
+</ul>
+
+<!-- Message Modal -->
+<div id="messageModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeMessageModal()">&times;</span>
+        <textarea id="messageContent" rows="5" placeholder="Type your message..."></textarea>
+        <button onclick="sendMessage()">Send Message</button>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script>
+   const socket = new SockJS('/ws');  // WebSocket endpoint
+const stompClient = Stomp.over(socket);
+
+stompClient.connect({}, () => {
+    console.log('Connected to WebSocket');
+});
+
+function openMessageModal(receiverId) {
+    document.getElementById('receiverId').value = receiverId;
+    document.getElementById('messageModal').style.display = 'block';
+}
+
+function closeMessageModal() {
+    document.getElementById('messageModal').style.display = 'none';
+}
+
+function sendMessage() {
+    const receiverId = document.getElementById('receiverId').value;
+    const messageContent = document.getElementById('messageContent').value;
+
+    const message = {
+        receiverId: receiverId,
+        content: messageContent
+    };
+
+    stompClient.send(`/app/chat/${receiverId}`, {}, JSON.stringify(message));
+
+    // Close the modal
+    closeMessageModal();
+}
+
+stompClient.connect({}, () => {
+    console.log('Connected to WebSocket');
+    stompClient.subscribe('/user/queue/private', (message) => {
+        const receivedMessage = JSON.parse(message.body);
+        console.log('Received message:', receivedMessage);
+        // Handle received messages (e.g., display in UI)
+    });
+});
+
+
+</script>
+
+</body>
+</html>
