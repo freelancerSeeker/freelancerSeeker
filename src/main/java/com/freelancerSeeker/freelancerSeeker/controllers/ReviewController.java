@@ -29,7 +29,6 @@ public class ReviewController {
     public String showFreelancerReviews(Model model,Principal principal) {
         if (principal != null) {
             String username = principal.getName();
-            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
             model.addAttribute("username",username);
         }
             List<UserSiteEntity> freelancers = userSiteRepo.findByRoles(Role.FREELANCER);
