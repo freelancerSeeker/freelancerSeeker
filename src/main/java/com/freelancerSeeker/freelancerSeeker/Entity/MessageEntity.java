@@ -4,6 +4,7 @@ import lombok.*;
 import javax.persistence.Id;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -23,6 +24,7 @@ public class MessageEntity {
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private UserSiteEntity receiver;
-
     private String content;
+    @Column(name = "createdAd")
+    private LocalDate createdAt;
 }

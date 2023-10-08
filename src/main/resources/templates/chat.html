@@ -1,77 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-<!-- User List with Message Button -->
-<ul>
-    <li>
-        User A
-        <button onclick="openMessageModal(1)">Message</button>
-    </li>
-    <li>
-        User B
-        <button onclick="openMessageModal(2)">Message</button>
-    </li>
-    <!-- Add more users as needed -->
-</ul>
+<h1>Chat with {{ receiver.username }}</h1>
+<div class="chat-container">
+    <ul class="message-list" id="message-list">
 
-<!-- Message Modal -->
-<div id="messageModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeMessageModal()">&times;</span>
-        <textarea id="messageContent" rows="5" placeholder="Type your message..."></textarea>
-        <button onclick="sendMessage()">Send Message</button>
-    </div>
+    </ul>
+    <input type="text" class="message-input" id="message-input" placeholder="Type your message...">
+    <button class="send-button" th:onclick="'sendMessage(' + ${sender.id} + ',' + ${receiver.id} + ')'">Send</button>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
 <script>
-   const socket = new SockJS('/ws');  // WebSocket endpoint
-const stompClient = Stomp.over(socket);
+var socket = new SockJS('/chat');
+var stompClient = Stomp.over(socket);
 
-stompClient.connect({}, () => {
-    console.log('Connected to WebSocket');
-});
+var isConnected = false; // Flag to track connection status
 
-function openMessageModal(receiverId) {
-    document.getElementById('receiverId').value = receiverId;
-    document.getElementById('messageModal').style.display = 'block';
-}
+stompClient.connect({}, function() {
+    isConnected = true; // Set the flag to true when connected
+    console.log("connected");
 
-function closeMessageModal() {
-    document.getElementById('messageModal').style.display = 'none';
-}
-
-function sendMessage() {
-    const receiverId = document.getElementById('receiverId').value;
-    const messageContent = document.getElementById('messageContent').value;
-
-    const message = {
-        receiverId: receiverId,
-        content: messageContent
-    };
-
-    stompClient.send(`/app/chat/${receiverId}`, {}, JSON.stringify(message));
-
-    // Close the modal
-    closeMessageModal();
-}
-
-stompClient.connect({}, () => {
-    console.log('Connected to WebSocket');
-    stompClient.subscribe('/user/queue/private', (message) => {
-        const receivedMessage = JSON.parse(message.body);
-        console.log('Received message:', receivedMessage);
-        // Handle received messages (e.g., display in UI)
+    stompClient.subscribe('/user/topic/chat', function(message) {
+        var chatMessage = JSON.parse(message.body);
+        displayMessage(chatMessage);
     });
 });
 
+function sendMessage(sender, receiver) {
+    if (isConnected) {
+        var messageInput = document.getElementById('message-input');
+        var message = messageInput.value;
 
+        // Send the message to the server
+        var messageDto = {
+            sender: sender,
+            receiver: receiver,
+            message: message
+        };
+        stompClient.send("/app/chat/send", {}, JSON.stringify(messageDto));
+
+        messageInput.value = '';
+    } else {
+        console.log("WebSocket connection is not established.");
+    }
+}
+
+function displayMessage(message) {
+    var messageList = document.getElementById('message-list');
+    var listItem = document.createElement('li');
+    listItem.innerText = message.sender.username + ': ' + message.message;
+    messageList.appendChild(listItem);
+}
 </script>
-
 </body>
 </html>
