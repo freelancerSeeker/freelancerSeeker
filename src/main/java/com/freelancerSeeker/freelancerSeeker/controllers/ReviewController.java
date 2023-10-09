@@ -26,6 +26,7 @@ public class ReviewController {
 
 
     @GetMapping("/reviews")
+
     public String showFreelancerReviews(Model model, Principal principal) {
         String username = (principal != null) ? principal.getName() : null;
         model.addAttribute("username", username);
@@ -35,6 +36,7 @@ public class ReviewController {
         if (userSite != null && userSite.getRoles() == Role.FREELANCER) {
             model.addAttribute("allowReview", false);
         } else {
+
             List<UserSiteEntity> freelancers = userSiteRepo.findByRoles(Role.FREELANCER);
             model.addAttribute("freelancerName", freelancers);
             model.addAttribute("allowReview", true);
