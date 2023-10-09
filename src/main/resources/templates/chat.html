@@ -15,6 +15,7 @@
         <span th:text="${message.sender.username}"></span>: <span th:text="${message.content}"></span>
     </li>
 </ul>
+<ul id="message-list"></ul>
 <h3 th:text="${receiver.username}"></h3>
 <h3 th:text="${sender.username}"></h3>
 <label for="message-input">Enter message to send</label>
@@ -24,7 +25,6 @@
         th:data-sender="${sender}" th:onclick="'sendMessage('+${sender.id} +','+${receiver.id}+')'">send
 </button>
 
-<ul id="message-list"></ul>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.js"
         integrity="sha512-lyIq9fRcCeSCXhp41XC/250UBmypAHV8KW+AhLcSEIksWHBfhzub6XXwDe67wTpOG8zrO2NAU/TYmEaCW+aQSg=="
