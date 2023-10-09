@@ -26,20 +26,21 @@ public class ReviewController {
 
 
     @GetMapping("/reviews")
-    public String showFreelancerReviews(Model model,Principal principal) {
-        if (principal != null) {
-            String username = principal.getName();
-            UserSiteEntity userSite = userSiteRepo.findByUsername(username);
-            model.addAttribute("username",username);
-        }
+    public String showFreelancerReviews(Model model, Principal principal) {
+        String username = (principal != null) ? principal.getName() : null;
+        model.addAttribute("username", username);
+        List<ReviewEntity> reviews = reviewRepository.findAll();
+        model.addAttribute("reviewsEntity", reviews);
+        UserSiteEntity userSite = (username != null) ? userSiteRepo.findByUsername(username) : null;
+        if (userSite != null && userSite.getRoles() == Role.FREELANCER) {
+            model.addAttribute("allowReview", false);
+        } else {
             List<UserSiteEntity> freelancers = userSiteRepo.findByRoles(Role.FREELANCER);
             model.addAttribute("freelancerName", freelancers);
-            List<ReviewEntity> reviews = reviewRepository.findAll();
-            model.addAttribute("reviewsEntity", reviews);
-
+            model.addAttribute("allowReview", true);
+        }
         return "reviews.html";
-         }
-
+    }
     @PostMapping("/addReview")
     public RedirectView addReview(
             @ModelAttribute ReviewEntity reviewEntity,

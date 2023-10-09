@@ -51,7 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/reviews",
                         "/posts/**")
                 .permitAll()
+                .antMatchers("/addReview").authenticated()
                 .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/login")
