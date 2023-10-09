@@ -129,6 +129,15 @@
                            th:href="@{/contracts}">Your contracts
                         </a>
                     </div>
+                    <div class="container">
+                        <button th:if="${user.username != loggedUsername}" class="btn btn-custom"
+                                style="margin-top: 12px;"
+                                th:text="'Chat'"
+                                th:onclick="'startChat(' + ${user.id} + ')'"
+                        >
+                            Chat
+                        </button>
+                    </div>
                 </div>
                 <div class="col-md-8 col-sm-12">
                     <div class="single-how-works no-bg">
@@ -324,6 +333,10 @@
 
 </section>
 <script>
+ function startChat(receiverId) {
+
+        window.location.href = '/chat?receiverId=' + receiverId;
+    }
     let btn = document.getElementById("editBtn");
   let form = document.getElementById("editProfile")
 

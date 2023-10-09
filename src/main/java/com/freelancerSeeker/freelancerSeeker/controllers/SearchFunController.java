@@ -131,11 +131,6 @@ public class SearchFunController {
         return "redirect:/?tag=Not found#explore";
     }
 
-    private Pageable calculatePostPerPage(int page) {
-        int postPerPage = 9;
-        return PageRequest.of(page - 1, postPerPage, Sort.by("CreatedAt").descending());
-    }
-
     @PostMapping("/filter")
     public String getFilter(Model model, @RequestParam(name = "subject", required = false, defaultValue = "") String subject,
                             Principal principal,
@@ -156,5 +151,8 @@ public class SearchFunController {
         return "redirect:/search/" + subject + "/filter" + "?startDate=" + startDate;
     }
 
-
+    private Pageable calculatePostPerPage(int page) {
+        int postPerPage = 9;
+        return PageRequest.of(page - 1, postPerPage, Sort.by("CreatedAt").descending());
+    }
 }
