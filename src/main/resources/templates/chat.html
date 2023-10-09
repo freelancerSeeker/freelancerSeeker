@@ -5,61 +5,83 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="css/chat.css">
     <title>Document</title>
 </head>
 <body>
-<h1>Chat with {{ receiver.username }}</h1>
-<div class="chat-container">
-    <ul class="message-list" id="message-list">
+<h1>All Messages</h1>
+<ul>
+    <li th:each="message : ${senderMsg}">
+        <span th:text="${message.sender.username}"></span>: <span th:text="${message.content}"></span>
+    </li>
+</ul>
+<h3 th:text="${receiver.username}"></h3>
+<h3 th:text="${sender.username}"></h3>
+<label for="message-input">Enter message to send</label>
+<input type="text" id="message-input">
 
-    </ul>
-    <input type="text" class="message-input" id="message-input" placeholder="Type your message...">
-    <button class="send-button" th:onclick="'sendMessage(' + ${sender.id} + ',' + ${receiver.id} + ')'">Send</button>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<button id="receiver_username" th:data-receiver="${receiver.username}"
+        th:data-sender="${sender}" th:onclick="'sendMessage('+${sender.id} +','+${receiver.id}+')'">send
+</button>
 
-<script>
-var socket = new SockJS('/chat');
-var stompClient = Stomp.over(socket);
+<ul id="message-list"></ul>
 
-var isConnected = false; // Flag to track connection status
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.js"
+        integrity="sha512-lyIq9fRcCeSCXhp41XC/250UBmypAHV8KW+AhLcSEIksWHBfhzub6XXwDe67wTpOG8zrO2NAU/TYmEaCW+aQSg=="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
+        integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
+        crossorigin="anonymous"></script>
+<script>// Try to set up WebSocket connection with the handshake at "http://localhost:8080/stomp"
+let sock = new SockJS("http://localhost:8080/stomp");
 
-stompClient.connect({}, function() {
-    isConnected = true; // Set the flag to true when connected
-    console.log("connected");
+// Create a new StompClient object with the WebSocket endpoint
+let client = Stomp.over(sock);
+let username = "shanab"
+// Start the STOMP communications, provide a callback for when the CONNECT frame arrives.
+client.connect({}, frame => {
+    // Subscribe to "/topic/messages". Whenever a message arrives add the text in a list-item element in the unordered list.
 
-    stompClient.subscribe('/user/topic/chat', function(message) {
-        var chatMessage = JSON.parse(message.body);
-        displayMessage(chatMessage);
+    client.subscribe("/topic/messages/" + username, payload => {
+
+        let message_list = document.getElementById('message-list');
+        let message = document.createElement('li');
+         const data = JSON.parse(payload.body);
+    const senderUsername = data.sender.username;
+    const messageContent = data.content;
+
+
+    const messageText = `${senderUsername}: ${messageContent}`;
+
+
+    message.appendChild(document.createTextNode(messageText));
+
+
+    message_list.appendChild(message);
+
+<!--        message.appendChild(document.createTextNode(JSON.parse(payload.body).content));-->
+<!--        message_list.appendChild(message);-->
+
     });
+
 });
 
-function sendMessage(sender, receiver) {
-    if (isConnected) {
-        var messageInput = document.getElementById('message-input');
-        var message = messageInput.value;
+// Take the value in the ‘message-input’ text field and send it to the server with empty headers.
+function sendMessage(send,rec){
 
-        // Send the message to the server
-        var messageDto = {
-            sender: sender,
-            receiver: receiver,
-            message: message
-        };
-        stompClient.send("/app/chat/send", {}, JSON.stringify(messageDto));
-
-        messageInput.value = '';
-    } else {
-        console.log("WebSocket connection is not established.");
+    let input = document.getElementById("message-input");
+    let message = input.value;
+    let msgJson = {
+    senderId : send,
+    receiverId : rec,
+    message : message,
     }
+    client.send('/app/chat/' + username, {}, JSON.stringify(msgJson));
+
 }
 
-function displayMessage(message) {
-    var messageList = document.getElementById('message-list');
-    var listItem = document.createElement('li');
-    listItem.innerText = message.sender.username + ': ' + message.message;
-    messageList.appendChild(listItem);
-}
+
+
 </script>
 </body>
 </html>

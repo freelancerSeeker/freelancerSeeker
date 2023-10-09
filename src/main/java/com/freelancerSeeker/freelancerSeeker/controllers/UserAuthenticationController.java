@@ -35,11 +35,11 @@ public class UserAuthenticationController {
 
 
     @GetMapping("/login")
-    public String login(Principal p,Model loginModel) {
+    public String login(Principal p, Model loginModel) {
         if (isAlreadyLoggedIn(p)) {
             return "redirect:/profile/" + p.getName();
         }
-        loginModel.addAttribute("countries",allCountriesList);
+        loginModel.addAttribute("countries", allCountriesList);
         return "signup";
     }
 

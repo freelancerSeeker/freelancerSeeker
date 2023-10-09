@@ -1,5 +1,6 @@
 package com.freelancerSeeker.freelancerSeeker.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.freelancerSeeker.freelancerSeeker.Enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +19,8 @@ import java.util.*;
 @Setter
 @Entity
 @Table
+@JsonIgnoreProperties(value = {"posts", "contracts", "contractsForApprove", "skillsList", "comments", "reviews", "followers", "following", "sentMessages", "receivedMessages"})
 public class UserSiteEntity implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
