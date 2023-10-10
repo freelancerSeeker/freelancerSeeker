@@ -56,16 +56,26 @@
 <body>
 <section th:replace="/fragments/header-nav :: header"></section>
 <section id="reviews" class="reviews">
-  <div class="welcome-hero-serch-box" >
+
+  <img th:src="@{/assets/img/save.jpg}" alt="Save Image" style="width:900px;height:700px;margin-left:600px ;opacity: 0.7;">
+  <div class="welcome-hero-serch-box"   >
+
     <div class="welcome-hero-form" style="margin-left:50px;">
-      <div class="single-welcome-hero-form">
-        <h3>Search Reviews</h3>
-        <form method="GET" action="/search" >
-          <input type="text" name="freelancerName" placeholder="Freelancer Name" />
-          <button type="submit" style="color: red;">
-            <i data-feather="search" class="flaticon-list-with-dots"></i>
-          </button>
-        </form>
+      <div class="single-welcome-hero-form" >
+        <div style="margin-top:-900px; width:600px">
+
+          <div style="display: flex; align-items: center;">
+            <h1 style="margin-right: 20px;">Search Reviews</h1>
+            <form method="GET" action="/search" style="border: 2px solid #FF545A; border-radius: 10px; display: flex; align-items: center;">
+              <input type="text" name="freelancerName" placeholder="Freelancer Name" style="flex: 1; padding: 10px; border: none; border-radius: 10px 0 0 10px;">
+              <button type="submit" style="background-color: transparent; border: none; padding: 10px; border-radius: 0 10px 10px 0;">
+                <i data-feather="search" class="flaticon-list-with-dots" style="color: red;"></i>
+              </button>
+            </form>
+          </div>
+
+
+        </div>
       </div>
     </div>
   </div>
@@ -89,39 +99,46 @@
         </div>
         <form method="post" th:action="'/reviews/delete/' + ${review.id}" th:if="${review.user.username==username }">
           <input type="hidden" name="_method" value="DELETE" />
-          <button type="submit" class="delete-btn btn btn-primary btn-sm " onclick="return confirm('Are you sure you want to delete this review?')">Delete</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeleteReview(this)">Delete</button>
         </form>
+
       </div><!--/.single-testimonial-box-->
     </div>
   </div>
-  <form method="post" action="/addReview" style="max-width: 400px; margin: 0 auto; margin-top:100px;" class="single-how-works no-bg">
-    <div class="form-group">
-      <label for="reviewedName">Freelancer Name:</label>
-      <select id="reviewedName" name="reviewedName" class="form-control">
-        <option th:each="freelancer : ${freelancerName}" th:value="${freelancer.username}"
-                th:text="${freelancer.username}">
-        </option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="description">Review:</label>
-      <input type="text" id="description" name="description" class="form-control" required style="width: 100%;"/>
-    </div>
-    <div class="form-group">
-      <label for="numberOfStars">Number of Stars (1-5):</label>
-      <select id="numberOfStars" name="numberOfStars" class="form-control" required style="width: 100%;">
-        <option value="1">&#9733;</option>
-        <option value="2">&#9733;&#9733;</option>
-        <option value="3">&#9733;&#9733;&#9733;</option>
-        <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
-        <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
-      </select>
-    </div>
-    <div class="welcome-hero-serch">
-      <button  type="submit" class="btn-primary welcome-hero-btn">Submit Review</button>
-    </div>
-  </form>
+  <div th:if="${#authentication.principal != null}">
 
+    <form method="post"  th:if="${allowReview}" action="/addReview" style="max-width: 400px; margin: 0 auto; margin-top:100px;" class="single-how-works no-bg">
+
+      <div class="form-group">
+        <label for="reviewedName">Freelancer Name:</label>
+        <select id="reviewedName" name="reviewedName" class="form-control">
+          <option th:each="freelancer : ${freelancerName}" th:value="${freelancer.username}"
+                  th:text="${freelancer.username}">
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="description">Review:</label>
+        <input type="text" id="description" name="description" class="form-control" required style="width: 100%;"/>
+      </div>
+      <div class="form-group">
+        <label for="numberOfStars">Number of Stars (1-5):</label>
+        <select id="numberOfStars" name="numberOfStars" class="form-control" required style="width: 100%;">
+          <option value="1">&#9733;</option>
+          <option value="2">&#9733;&#9733;</option>
+          <option value="3">&#9733;&#9733;&#9733;</option>
+          <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+          <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+        </select>
+      </div>
+      <div class="welcome-hero-serch">
+        <button  type="submit" class="btn-primary welcome-hero-btn how-work-btn">Submit Review</button>
+      </div>
+    </form>
+  </div>
+  <div th:unless="${#authentication.principal != null}">
+    <p>Please log in to add a review.</p>
+  </div>
 </section>
 
 <script>
@@ -178,6 +195,77 @@ document.addEventListener("DOMContentLoaded", function () {
   </script>
 
 </script>
+
+
+<script>
+function confirmDeleteReview(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If the user confirms, submit the form
+            button.parentElement.submit();
+        }
+    });
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<footer id="footer" class="footer">
+  <div class="container">
+    <div class="footer-menu">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">FreeLancer<span>Seeker</span></a>
+          </div><!--/.navbar-header-->
+        </div>
+        <div class="col-sm-9">
+          <ul class="footer-menu-item">
+            <li class="active"><a href="/">home</a></li>
+            <li class=""><a href="/reviews">review</a></li>
+            <li class=""><a href="/about">About us</a></li>
+            <li class=""><a href="/#explore">Explore</a></li>
+
+
+            <li>
+          </ul><!--/.nav -->
+        </div>
+      </div>
+    </div>
+    <div class="hm-footer-copyright">
+      <div class="row">
+        <div class="col-sm-5">
+
+        </div>
+        <div class="col-sm-7">
+          <div class="footer-social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-google-plus"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div><!--/.hm-footer-copyright-->
+  </div><!--/.container-->
+
+  <div id="scroll-Top">
+    <div class="return-to-top">
+      <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title=""
+         data-original-title="Back to Top" aria-hidden="true"></i>
+    </div>
+
+  </div><!--/.scroll-Top-->
+
+</footer><!--/.footer-->
+
 <script src="assets/js/jquery.js"></script>
 
 <!--modernizr.min.js-->
@@ -203,5 +291,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <!--Custom JS-->
 <script src="assets/js/custom.js"></script>
+
+
+
+
+
 </body>
 </html>

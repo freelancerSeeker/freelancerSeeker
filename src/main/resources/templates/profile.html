@@ -141,8 +141,9 @@
                 </div>
                 <div class="col-md-8 col-sm-12">
                     <div class="single-how-works no-bg">
-                        <div class="single-how-works-icon">
-                            <i class="flaticon-location-on-road"></i>
+                        <div class="single-how-works-icon" >
+                            <img th:src="@{/assets/img/profile.png}" alt="Save Image"/>
+                            <i class="flaticon-location-on-road" ></i>
                         </div>
                         <h2 style="margin-top:10px" th:text="${user.username}"></h2>
                         <div class="row">
@@ -471,6 +472,57 @@ function toggleDropdown(icon) {
 
 
 </script>
+
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="footer-menu">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="index.html">FreeLancer<span>Seeker</span></a>
+                    </div><!--/.navbar-header-->
+                </div>
+                <div class="col-sm-9">
+                    <ul class="footer-menu-item">
+                        <li class="active"><a href="/">home</a></li>
+                        <li class=""><a href="/reviews">review</a></li>
+                        <li class=""><a href="/about">About us</a></li>
+                        <li class=""><a href="/#explore">Explore</a></li>
+
+
+                        <li>
+                    </ul><!--/.nav -->
+                </div>
+            </div>
+        </div>
+        <div class="hm-footer-copyright">
+            <div class="row">
+                <div class="col-sm-5">
+
+                </div>
+                <div class="col-sm-7">
+                    <div class="footer-social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                        <a href="#"><i class="fa fa-google-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div><!--/.hm-footer-copyright-->
+    </div><!--/.container-->
+
+    <div id="scroll-Top">
+        <div class="return-to-top">
+            <i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title=""
+               data-original-title="Back to Top" aria-hidden="true"></i>
+        </div>
+
+    </div><!--/.scroll-Top-->
+
+</footer><!--/.footer-->
+
 <script th:src="@{/assets/js/jquery.js}"></script>
 
 <!--modernizr.min.js-->

@@ -1157,6 +1157,7 @@ font-size:14px;
 text-capitalize:none;
 padding: 6px 12px;}
 
+
 .message-container {
  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -1188,3 +1189,4 @@ padding: 6px 12px;}
   .messages::-webkit-scrollbar-thumb:hover {
     background-color: #555;
   }
+
