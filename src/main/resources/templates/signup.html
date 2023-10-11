@@ -20,14 +20,14 @@
         <h2>Welcome</h2>
         <form action="/perform_login" method="POST" onsubmit="return formValidate('usernames', 'passwords')">
             <label>
-                <span>UserName</span>
+                <span style="color:#000000">UserName</span>
                 <input type="text" id="usernames" name="username" required/>
             </label>
             <label>
-                <span>Password</span>
+                <span style="color:#000000">Password</span>
                 <input type="password" id="passwords" name="password" required/>
             </label>
-            <p class="forgot-pass">Forgot password?</p>
+            <p style="color:#000000" class="forgot-pass">Forgot password?</p>
             <button type="submit" class="submit">Sign In</button>
             <button type="button" class="submit"><a class="text-decoration-none text-light" href="/">Home</a></button>
         </form>
@@ -38,7 +38,7 @@
                 <h3>Don't have an account? Please Sign up!</h3>
             </div>
             <div class="img__text m--in">
-                <h3>If you already have an account, just sign in.</h3>
+                <h3 >If you already have an account, just sign in.</h3>
             </div>
             <div class="img__btn">
                 <span class="m--up">Sign Up</span>
@@ -50,37 +50,38 @@
             <form action="/signup" method="POST" id="userSignupForm"
                   onsubmit="return formValidate('email', 'password')">
                 <label>
-                    <span>Username</span>
+                    <span style="color:#000000">Username</span>
                     <input type="text" name="username" id="username">
                 </label>
                 <p id="usernameError" class="error" th:text="${usernameError}"></p>
 
                 <label>
-                    <span>Password</span>
+                    <span style="color:#000000">Password</span>
                     <input type="password" name="password" id="password">
                 </label>
                 <p id="passwordError" class="error"></p>
                 <label>
-                    <span>Country</span>
+                    <span style="color:#000000">Country</span>
                     <select class="w-100" name="country">
-                        <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
+                        <option th:each="country : ${countries}" th:text="${country}" th:value="${country}"
+                                th:selected="${country == 'Jordan'}"></option>
                     </select>
                 </label>
                 <label>
-                    <span>Description</span>
+                    <span style="color:#000000">Description</span>
                     <input type="text" name="description">
                 </label>
                 <label>
-                    <span>Email</span>
+                    <span style="color:#000000">Email</span>
                     <input type="email" name="email" id="email">
                 </label>
                 <p id="emailError" class="error"></p>
                 <label>
-                    <span>First Name</span>
+                    <span style="color:#000000">First Name</span>
                     <input type="text" class="form-style" name="firstname">
                 </label>
                 <label>
-                    <span>Last Name</span>
+                    <span style="color:#000000">Last Name</span>
                     <input type="text" class="form-style" name="lastname">
                 </label>
                 <div class="flex-row d-flex align-items-baseline">
@@ -142,6 +143,7 @@
 
     return isValid;
 }
+
 </script>
 
 </body>

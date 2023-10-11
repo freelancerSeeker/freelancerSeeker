@@ -1189,4 +1189,21 @@ padding: 6px 12px;}
   .messages::-webkit-scrollbar-thumb:hover {
     background-color: #555;
   }
+  .hover-user:hover {
+  color: blue;
+  }
+  .mt-20 {
+  margin-top : 20px;
+  }
+  .btn-custom-reverse {
+  background-color: #FF545A;
+  color : white;
+  }
+  .btn-custom-reverse:hover {
+  background-color: white;
+  color : #FF545A;
+  }
+
+
+
 
