@@ -19,7 +19,7 @@ import java.util.*;
 @Setter
 @Entity
 @Table
-@JsonIgnoreProperties(value = {"posts", "contracts", "contractsForApprove", "skillsList", "comments", "reviews", "followers", "following", "sentMessages", "receivedMessages"})
+@JsonIgnoreProperties(value = {"password","posts", "contracts", "contractsForApprove", "skillsList", "comments", "reviews", "followers", "following", "sentMessages", "receivedMessages"})
 public class UserSiteEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
