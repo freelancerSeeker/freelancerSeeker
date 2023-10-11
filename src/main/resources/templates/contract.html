@@ -177,8 +177,8 @@
                 <div th:each="contract :${contracts}"  class=" col-md-4 col-sm-6">
                     <div class="single-how-works">
                         <div>
-                            <h1 style="font-size: 24px; font-weight: bold;"><a th:href="'/profile/' + ${contract.user.username}" th:text=" ${contract.user.username}"></a></h1>
                             <h2 th:text="'Created For: ' + ${contract.approvedBy.username}" style="margin-top: 10px; font-style: italic; color: #666;"></h2>
+                            <h1 style="font-size: 24px; font-weight: bold;"><a class="hover-user" th:href="'/profile/' + ${contract.user.username}" th:text=" ${contract.user.username}"></a></h1>
                             <h2 th:text="'contract Subject: ' + ${contract.subject}" style="font-size: 20px; margin-top: 10px;"></h2>
                             <p th:text="'contract Body: ' + ${contract.body}" style="margin-top: 10px;"></p>
                             <p th:text="'price Per Hour: ' + ${contract.pricePerHour}" style="margin-top: 10px;"></p>
@@ -189,12 +189,12 @@
 
                             <form th:action="@{'/approve-contract/' + ${contract.id}}" method="post" th:if="${user.roles.name == 'USER' and !contract.approved}">
                                 <input type="hidden" th:name="contract.id" th:value="${contract.id}" />
-                                <button type="submit" class="btn btn-custom">Approve Contract</button>
+                                <button type="submit" class="btn btn-custom-reverse">Approve Contract</button>
                             </form>
 
                             <form th:action="@{'/contracts/delete/' + ${contract.id}}" method="post">
                                 <input type="hidden" name="_method" value="DELETE" />
-                                <button type="submit" class="btn btn-custom" th:if="${user.roles.name == 'FREELANCER'}">Delete</button>
+                                <button type="submit" class="btn btn-custom-reverse" th:if="${user.roles.name == 'FREELANCER'}">Delete</button>
                             </form>
 
                             <button id="openModalButton" th:attr="data-contract-id=${contract.id}" th:if="${user.roles.name == 'FREELANCER' and !contract.approved }" class="btn btn-custom">Edit Contract</button>
@@ -232,7 +232,7 @@
                                         </div>
 
                                         <div>
-                                            <button type="submit" class="btn btn-custom">Update Contract</button>
+                                            <button type="submit" class="btn btn-custom-reverse">Update Contract</button>
                                         </div>
                                     </form>
 

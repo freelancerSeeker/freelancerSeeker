@@ -200,7 +200,7 @@
 
                         <div class="single-explore-txt bg-theme-1">
                             <h2>
-                                <a th:href="@{'/profile/' + ${post.user.username}}" th:text="${post.user.username}"></a>
+                                <a class="hover-user" th:href="@{'/profile/' + ${post.user.username}}" th:text="${post.user.username}"></a>
                             </h2>
                             <p th:text="${post.createdAt}"> Date </p>
                             <p th:text="${post.user.roles}">Role</p>
