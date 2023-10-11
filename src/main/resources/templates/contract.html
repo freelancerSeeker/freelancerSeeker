@@ -177,7 +177,7 @@
                 <div th:each="contract :${contracts}"  class=" col-md-4 col-sm-6">
                     <div class="single-how-works">
                         <div>
-                            <h1 th:text="'Created By: ' + ${contract.user.username}" style="font-size: 24px; font-weight: bold;"></h1>
+                            <h1 style="font-size: 24px; font-weight: bold;"><a th:href="'/profile/' + ${contract.user.username}" th:text=" ${contract.user.username}"></a></h1>
                             <h2 th:text="'Created For: ' + ${contract.approvedBy.username}" style="margin-top: 10px; font-style: italic; color: #666;"></h2>
                             <h2 th:text="'contract Subject: ' + ${contract.subject}" style="font-size: 20px; margin-top: 10px;"></h2>
                             <p th:text="'contract Body: ' + ${contract.body}" style="margin-top: 10px;"></p>
