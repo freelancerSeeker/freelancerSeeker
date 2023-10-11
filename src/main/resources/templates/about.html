@@ -52,10 +52,120 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+    .section {
+      padding: 50px 0;
+      background-color: #f9f9f9;
+      margin-bottom: 20px;
+    }
 
+    .section .container {
+      text-align: center;
+    }
+
+    .section-header h2 {
+      color: #333;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .section-header p {
+      color: #555;
+      font-size: 18px;
+    }
+
+    .section-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
+
+    .section-content p {
+      color: #555;
+      font-size: 16px;
+      text-align: left;
+    }
+    .features {
+      padding: 50px 0;
+      background-color: #f9f9f9;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .feature-item {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: calc(50% - 20px);
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
+
+    .feature-item:last-child {
+      margin-right: 0;
+    }
+
+    .feature-item h3 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .feature-item p {
+      color: #555;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 <section th:replace="/fragments/header-nav :: header"></section>
+<section id="overview" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Project Overview</h2>
+            <p>Discover what Freelancer Seeker is all about and the problem it aims to solve.</p>
+        </div><!--/.section-header-->
+        <div class="section-content">
+            <p>Freelancer Seeker is a platform designed to bridge the gap between freelancers and clients, offering a space where freelancers can showcase their skills and expertise while clients can find the right talent for their projects. Our mission is to create a seamless and efficient process for connecting freelancers and clients, making it easier for both parties to collaborate and achieve successful outcomes.</p>
+            <p>We recognize the challenges that freelancers often face in finding suitable projects and clients struggling to identify the ideal freelancer for their needs. Freelancer Seeker addresses this issue by providing a user-friendly platform that simplifies the hiring process, encourages transparent communication, and facilitates mutually beneficial contracts. Our goal is to revolutionize the freelancing landscape and empower freelancers and clients to thrive in their respective domains.</p>
+        </div>
+    </div><!--/.container-->
+</section>
+<section id="features" class="features">
+    <div class="container">
+        <div class="section-header">
+            <h2>Website Features</h2>
+            <p>Explore the amazing features of our website that cater to both freelancers and users.</p>
+        </div><!--/.section-header-->
+        <div class="feature-list">
+            <div class="feature-item">
+                <h3>Contract Feature</h3>
+                <p>The Contract feature allows freelancers and users to define and establish contracts for their projects or services. It provides a structured and binding agreement, protecting both parties and ensuring a clear understanding of project scope, timelines, and compensation terms.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Chatting Feature</h3>
+                <p>The Chatting feature facilitates direct communication and negotiation between freelancers and users. It includes real-time messaging capabilities, enabling discussions about project requirements, expectations, and any adjustments needed, fostering effective collaboration and project success.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Post Feature</h3>
+                <p>The Post feature empowers freelancers and users to share project-related updates, insights, or announcements with the community. It serves as a platform to showcase work progress, discuss ideas, and gather feedback from peers, enhancing engagement and collaboration within the platform.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Tag Feature</h3>
+                <p>The Tag feature allows users to categorize their posts based on specific topics or themes. Each post can be associated with relevant tags, making it easier for the community to discover and engage with content related to their interests. It enhances content organization and navigation.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Skills for Freelancers</h3>
+                <p>The Skills feature enables freelancers to showcase a comprehensive list of their skills and expertise. It acts as a repository where freelancers can display their competencies, making it easier for potential clients to identify the right freelancer for their projects based on required skills.</p>
+            </div>
+        </div>
+    </div><!--/.container-->
+</section>
 <section id="blog" class="blog">
     <div class="container">
         <div class="section-header">
@@ -167,11 +277,6 @@
     </div><!--/.container-->
 
 </section><!--/.blog-->
-
-
-
-
-
 <section id="contact" class="subscription">
     <div class="container">
         <div class="subscribe-title text-center">
