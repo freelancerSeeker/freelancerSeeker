@@ -324,6 +324,9 @@
                                     th:if="${user.username == loggedUsername}">Delete
                             </button>
                         </form>
+                        <div class="col-sm-5">
+                            <a class="close-btn" th:href="@{'/Posts/'+${posts.id}}">View</a>
+                        </div>
                     </div>
                 </div>
             </div>

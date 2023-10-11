@@ -57,7 +57,7 @@
 <body>
 <section th:replace="/fragments/header-nav :: header"></section>
 <div class="container">
-    <h3 th:text="${receiver.username}" class="heading"></h3>
+    <h3 class="heading"><a th:href="'/profile/'+ ${receiver.username}" th:text="${receiver.username}"></a></h3>
 
 
     <h5 class="heading">Messages</h5>
